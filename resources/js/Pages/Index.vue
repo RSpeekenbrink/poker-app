@@ -1,9 +1,9 @@
 <script setup>
-import CreateRoom from "@/components/CreateRoomComponent.vue";
+import CreateRoomForm from "@/Pages/Partials/CreateRoomForm.vue";
 </script>
 
 <template>
   <div class="h-full">
-    <create-room/>
+    <create-room-form/>
   </div>
 </template>
