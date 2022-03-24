@@ -99,6 +99,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -329,108 +343,187 @@ var render = function () {
           "div",
           { staticClass: "bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10" },
           [
-            _c(
-              "form",
-              {
-                staticClass: "space-y-6",
-                attrs: { action: "#", method: "POST" },
-              },
-              [
-                _c("div", [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-sm font-medium text-gray-700",
-                      attrs: { for: "room_name" },
+            _c("div", { staticClass: "space-y-6" }, [
+              _c("div", [
+                _c(
+                  "label",
+                  {
+                    staticClass: "block text-sm font-medium text-gray-700",
+                    attrs: { for: "room_name" },
+                  },
+                  [_vm._v(" Room name ")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "mt-1 relative" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.room_name,
+                        expression: "form.room_name",
+                      },
+                    ],
+                    staticClass:
+                      "appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm",
+                    class: _vm.form.errors.room_name
+                      ? "border-red-300 text-red-900 placeholder-red-300" +
+                        "focus:ring-red-500 focus:border-red-500"
+                      : "placeholder-gray-400 focus:ring-indigo-500" +
+                        "border-gray-300 focus:border-indigo-500",
+                    attrs: {
+                      id: "room_name",
+                      name: "room_name",
+                      type: "text",
+                      required: "",
                     },
-                    [_vm._v(" Room name ")]
-                  ),
+                    domProps: { value: _vm.form.room_name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "room_name", $event.target.value)
+                      },
+                    },
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-1" }, [
-                    _c("input", {
-                      directives: [
+                  _vm.form.errors.room_name
+                    ? _c(
+                        "div",
                         {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.room_name,
-                          expression: "form.room_name",
+                          staticClass:
+                            "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none",
                         },
-                      ],
-                      staticClass:
-                        "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md\n                                 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500\n                                 focus:border-indigo-500 sm:text-sm",
-                      attrs: {
-                        id: "room_name",
-                        name: "room_name",
-                        type: "text",
-                        required: "",
-                      },
-                      domProps: { value: _vm.form.room_name },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "room_name", $event.target.value)
-                        },
-                      },
-                    }),
-                  ]),
+                        [
+                          _c(
+                            "svg",
+                            {
+                              staticClass: "h-5 w-5 text-red-500",
+                              attrs: {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                viewBox: "0 0 20 20",
+                                fill: "currentColor",
+                              },
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  "fill-rule": "evenodd",
+                                  d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z",
+                                  "clip-rule": "evenodd",
+                                },
+                              }),
+                            ]
+                          ),
+                        ]
+                      )
+                    : _vm._e(),
                 ]),
                 _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "label",
-                    {
-                      staticClass: "block text-sm font-medium text-gray-700",
-                      attrs: { for: "name" },
+                _vm.form.errors.room_name
+                  ? _c("p", { staticClass: "mt-2 text-sm text-red-600" }, [
+                      _vm._v(_vm._s(_vm.form.errors.room_name)),
+                    ])
+                  : _vm._e(),
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c(
+                  "label",
+                  {
+                    staticClass: "block text-sm font-medium text-gray-700",
+                    attrs: { for: "name" },
+                  },
+                  [_vm._v(" Your name ")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "mt-1 relative" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.name,
+                        expression: "form.name",
+                      },
+                    ],
+                    staticClass:
+                      "appearance-none block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none sm:text-sm",
+                    class: _vm.form.errors.name
+                      ? "border-red-300 text-red-900 placeholder-red-300" +
+                        "focus:ring-red-500 focus:border-red-500"
+                      : "placeholder-gray-400 focus:ring-indigo-500" +
+                        "border-gray-300 focus:border-indigo-500",
+                    attrs: {
+                      id: "name",
+                      name: "name",
+                      type: "text",
+                      required: "",
                     },
-                    [_vm._v(" Your Name ")]
-                  ),
+                    domProps: { value: _vm.form.name },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "name", $event.target.value)
+                      },
+                    },
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "mt-1" }, [
-                    _c("input", {
-                      directives: [
+                  _vm.form.errors.name
+                    ? _c(
+                        "div",
                         {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.name,
-                          expression: "form.name",
+                          staticClass:
+                            "absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none",
                         },
-                      ],
-                      staticClass:
-                        "appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md\n                                 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500\n                                 focus:border-indigo-500 sm:text-sm",
-                      attrs: {
-                        id: "name",
-                        name: "name",
-                        type: "text",
-                        required: "",
-                      },
-                      domProps: { value: _vm.form.name },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "name", $event.target.value)
-                        },
-                      },
-                    }),
-                  ]),
+                        [
+                          _c(
+                            "svg",
+                            {
+                              staticClass: "h-5 w-5 text-red-500",
+                              attrs: {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                viewBox: "0 0 20 20",
+                                fill: "currentColor",
+                              },
+                            },
+                            [
+                              _c("path", {
+                                attrs: {
+                                  "fill-rule": "evenodd",
+                                  d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z",
+                                  "clip-rule": "evenodd",
+                                },
+                              }),
+                            ]
+                          ),
+                        ]
+                      )
+                    : _vm._e(),
                 ]),
                 _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass:
-                        "w-full flex justify-center py-2 px-4 border border-transparent\n                      rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700\n                      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
-                      on: { click: _vm.submit },
-                    },
-                    [_vm._v("\n            Create Room\n          ")]
-                  ),
-                ]),
-              ]
-            ),
+                _vm.form.errors.name
+                  ? _c("p", { staticClass: "mt-2 text-sm text-red-600" }, [
+                      _vm._v(_vm._s(_vm.form.errors.name)),
+                    ])
+                  : _vm._e(),
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _c(
+                  "button",
+                  {
+                    staticClass:
+                      "w-full flex justify-center py-2 px-4 border border-transparent\n                      rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700\n                      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+                    on: { click: _vm.submit },
+                  },
+                  [_vm._v("\n            Create Room\n          ")]
+                ),
+              ]),
+            ]),
           ]
         ),
       ]),
