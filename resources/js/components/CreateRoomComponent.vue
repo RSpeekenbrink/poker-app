@@ -1,3 +1,16 @@
+<script setup>
+import { useForm } from '@inertiajs/inertia-vue3';
+
+const form = useForm({
+  room_name: null,
+  name: null,
+});
+
+const submit = () => {
+  form.post(route('room.create'));
+}
+</script>
+
 <template>
   <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
@@ -74,21 +87,3 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-      form: this.$inertia.form({
-        room_name: null,
-        name: null,
-      }),
-    }
-  },
-  methods: {
-    submit() {
-      this.form.post(route('room.create'));
-    }
-  }
-}
-</script>
