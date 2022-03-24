@@ -4,8 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import Vue from 'vue';
-import { createInertiaApp } from '@inertiajs/inertia-vue';
-import { InertiaProgress } from '@inertiajs/progress'
+import {createInertiaApp} from '@inertiajs/inertia-vue';
+import {InertiaProgress} from '@inertiajs/progress'
 
 require('./bootstrap');
 
@@ -18,12 +18,13 @@ InertiaProgress.init();
  */
 
 createInertiaApp({
-    resolve: name => import(`./Pages/${name}`),
-    setup({ el, App, props, plugin }) {
-        Vue.use(plugin)
+  resolve: name => import(`./Pages/${name}`),
+  setup({el, App, props, plugin}) {
+    Vue.use(plugin)
+    Vue.mixin({ methods: { route }})
 
-        new Vue({
-            render: h => h(App, props),
-        }).$mount(el)
-    },
+    new Vue({
+      render: h => h(App, props),
+    }).$mount(el)
+  },
 })

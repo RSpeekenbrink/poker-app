@@ -10,7 +10,7 @@ fi
 docker run --rm \
     -v $(pwd):/opt \
     -w /opt \
-    laravelsail/php80-composer:latest \
+    laravelsail/php81-composer:latest \
     bash -c "composer install && cp .env.example .env && php artisan key:generate"
 
 CYAN='\033[0;36m'
