@@ -14,7 +14,7 @@ const props = defineProps({
 
 defineEmits(['update:modelValue']);
 
-const id = uniqueId(name);
+const id = uniqueId('input_');
 </script>
 
 <template>
