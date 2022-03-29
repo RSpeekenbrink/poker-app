@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Auth\Authenticatable;
+use \Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,9 +15,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $name
  * @property integer $room_id
  */
-class Participant extends Model
+class Participant extends Model implements AuthenticatableContract
 {
-    use HasFactory;
+    use HasFactory, Authenticatable;
 
     /**
      * The table associated with the model.

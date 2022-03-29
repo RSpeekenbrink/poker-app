@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\ParticipantService as ParticpantServiceContract;
 use App\Models\Participant;
 use App\Models\Room;
+use Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -12,6 +13,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 class ParticipantService implements ParticpantServiceContract
 {
     const PARTICIPANT_SESSION_KEY = 'participant_uuid';
+    const PARTICIPANT_GUARD = 'web';
 
     /**
      * @inheritDoc
@@ -36,9 +38,9 @@ class ParticipantService implements ParticpantServiceContract
     /**
      * @inheritDoc
      */
-    public function setSessionParticipant(Participant $participant): self
+    public function authenticateAs(Participant $participant): self
     {
-        Session::put(self::PARTICIPANT_SESSION_KEY, $participant->uuid);
+        Auth::guard(self::PARTICIPANT_GUARD)->login($participant, );
 
         return $this;
     }
@@ -46,10 +48,9 @@ class ParticipantService implements ParticpantServiceContract
     /**
      * @inheritDoc
      */
-    public function hasInSession(): bool
+    public function isLoggedIn(): bool
     {
-        return Session::has(self::PARTICIPANT_SESSION_KEY)
-            && Participant::where('uuid', Session::get(self::PARTICIPANT_SESSION_KEY));
+        return Auth::guard(self::PARTICIPANT_GUARD)->check();
     }
 
     /**
@@ -57,8 +58,8 @@ class ParticipantService implements ParticpantServiceContract
      */
     public function getFromSession(): ?Participant
     {
-        if ($this->hasInSession()) {
-            return $this->getByUuid(Session::get(self::PARTICIPANT_SESSION_KEY));
+        if ($this->isLoggedIn()) {
+            return Auth::guard(self::PARTICIPANT_GUARD)->user();
         }
 
         return null;

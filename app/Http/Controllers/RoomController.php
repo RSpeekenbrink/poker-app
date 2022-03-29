@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Contracts\ParticipantService;
 use App\Contracts\RoomService;
 use App\Http\Requests\CreateRoomRequest;
+use App\Http\Requests\JoinRequest;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -41,7 +41,7 @@ class RoomController extends Controller
 
         $this->participantService->setOwnedRoomFor($participant, $room);
 
-        $this->participantService->setSessionParticipant($participant);
+        $this->participantService->authenticateAs($participant);
 
         return Redirect::route('room.show', $room->uuid);
     }
@@ -71,5 +71,36 @@ class RoomController extends Controller
                 'name' => $participant->name,
             ]
         ]);
+    }
+
+    /**
+     * Show join form to create participant for room.
+     *
+     * @param Room $room
+     * @return Response
+     */
+    public function showJoin(Room $room): Response
+    {
+        return Inertia::render('Room/Join', [
+            'room' => [
+                'uuid' => $room->uuid,
+                'name' => $room->name,
+            ]
+        ]);
+    }
+
+    /**
+     * Try and create new participant and join room.
+     *
+     * @param Room $room
+     * @return RedirectResponse
+     */
+    public function join(JoinRequest $request, Room $room): RedirectResponse
+    {
+        $participant = $this->participantService->createParticipant($room, $request->name);
+
+        $this->participantService->authenticateAs($participant);
+
+        return Redirect::route('room.show', $room->uuid);
     }
 }

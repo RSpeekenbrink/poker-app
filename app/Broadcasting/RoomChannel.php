@@ -4,7 +4,7 @@ namespace App\Broadcasting;
 
 use App\Contracts\ParticipantService;
 use App\Contracts\RoomService;
-use App\Models\Room;
+use App\Models\Participant;
 
 class RoomChannel
 {
@@ -30,7 +30,7 @@ class RoomChannel
      *
      * @return array|bool
      */
-    public function join(string $roomId): array|bool
+    public function join(Participant $participant, string $roomId): array|bool
     {
         $room = $this->roomService->getByUuid($roomId);
 
@@ -38,9 +38,7 @@ class RoomChannel
             return false;
         }
 
-        $participant = $this->participantService->getFromSession();
-
-        if ($participant && $this->roomService->hasParticipant($room, $participant)) {
+        if ($this->roomService->hasParticipant($room, $participant)) {
             return [
                 'uuid' => $participant->uuid,
                 'name' => $participant->name,
