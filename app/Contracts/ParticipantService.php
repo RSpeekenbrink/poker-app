@@ -25,19 +25,19 @@ interface ParticipantService
     public function getByUuid(string $uuid): ?Participant;
 
     /**
-     * Save participant to current session (log-in ish)
+     * Log in as given Participant
      *
      * @param Participant $participant
      * @return $this
      */
-    public function setSessionParticipant(Participant $participant): self;
+    public function authenticateAs(Participant $participant): self;
 
     /**
      * Return if the session has a participant uuid saved and if this one is valid.
      *
      * @return bool
      */
-    public function hasInSession(): bool;
+    public function isLoggedIn(): bool;
 
     /**
      * Get Participant from session when exists.

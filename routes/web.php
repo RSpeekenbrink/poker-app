@@ -21,4 +21,6 @@ Route::bind('room', function ($value) {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/create-room', [RoomController::class, 'create'])->name('room.create');
-Route::get('/{room}', [RoomController::class, 'show'])->middleware('known-participant')->name('room.show');
+Route::get('/{room}/join', [RoomController::class, 'showJoin'])->middleware('guest')->name('room.join');
+Route::post('/{room}/join', [RoomController::class, 'join'])->middleware('guest')->name('room.join.attempt');
+Route::get('/{room}', [RoomController::class, 'show'])->middleware('auth')->name('room.show');
