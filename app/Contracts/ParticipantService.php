@@ -23,4 +23,44 @@ interface ParticipantService
      * @return ?Participant
      */
     public function getByUuid(string $uuid): ?Participant;
+
+    /**
+     * Save participant to current session (log-in ish)
+     *
+     * @param Participant $participant
+     * @return $this
+     */
+    public function setSessionParticipant(Participant $participant): self;
+
+    /**
+     * Return if the session has a participant uuid saved and if this one is valid.
+     *
+     * @return bool
+     */
+    public function hasInSession(): bool;
+
+    /**
+     * Get Participant from session when exists.
+     *
+     * @return Participant|null
+     */
+    public function getFromSession(): ?Participant;
+
+    /**
+     * Set owned room to given room for participant.
+     *
+     * @param Participant $participant
+     * @param Room $room
+     * @return $this
+     */
+    public function setOwnedRoomFor(Participant $participant, Room $room): self;
+
+    /**
+     * Check if given participant is owner of given room.
+     *
+     * @param Room $room
+     * @param Participant $participant
+     * @return bool
+     */
+    public function isOwner(Room $room, Participant $participant): bool;
 }

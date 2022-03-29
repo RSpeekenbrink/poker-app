@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\RoomService as RoomServiceContract;
+use App\Models\Participant;
 use App\Models\Room;
 use Illuminate\Support\Str;
 
@@ -46,5 +47,13 @@ class RoomService implements RoomServiceContract
     public function getByUuid(string $uuid): ?Room
     {
         return Room::where('uuid', $uuid)->first();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasParticipant(Room $room, Participant $particpant): bool
+    {
+        return $room->participants()->where('uuid', $particpant->uuid)->exists();
     }
 }

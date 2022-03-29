@@ -5,6 +5,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property integer $id
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $voting
  * @property Carbon $voting_started_at
  * @property array $votes
+ * @property integer $owner_id
  */
 class Room extends Model
 {
@@ -47,4 +50,24 @@ class Room extends Model
         'voting' => 'boolean',
         'voting_started_at' => 'datetime',
     ];
+
+    /**
+     * Get all participants belonging to a room.
+     *
+     * @return HasMany
+     */
+    public function participants(): HasMany
+    {
+        return $this->hasMany(Participant::class, 'room_id');
+    }
+
+    /**
+     * Get the participant owning the room.
+     *
+     * @return BelongsTo
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(Participant::class, 'owner_id', 'id');
+    }
 }

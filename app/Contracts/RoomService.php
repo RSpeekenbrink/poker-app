@@ -2,6 +2,7 @@
 
 namespace App\Contracts;
 
+use App\Models\Participant;
 use App\Models\Room;
 
 interface RoomService
@@ -28,4 +29,13 @@ interface RoomService
      * @return ?Room
      */
     public function getByUuid(string $uuid): ?Room;
+
+    /**
+     * Returns if given participant is participating given room.
+     *
+     * @param Room $room
+     * @param Participant $particpant
+     * @return bool
+     */
+    public function hasParticipant(Room $room, Participant $particpant): bool;
 }
