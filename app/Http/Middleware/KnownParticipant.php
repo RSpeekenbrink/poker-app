@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\ParticipantService;
+use App\Contracts\ParticipantService;
 use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

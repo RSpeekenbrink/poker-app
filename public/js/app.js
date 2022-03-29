@@ -21853,6 +21853,15 @@ __webpack_require__.r(__webpack_exports__);
     var store = (0,_store__WEBPACK_IMPORTED_MODULE_0__.useStore)();
     store.setParticipant(props.participant.id, props.participant.name);
     store.setRoom(props.room.id, props.room.name, props.room.isOwner);
+    Echo.join("room.".concat(store.currentRoomId)).here(function (participants) {
+      store.setParticipants(participants);
+    }).joining(function (participant) {
+      console.log(participant);
+    }).leaving(function (participant) {
+      console.log(participant);
+    }).error(function (error) {
+      console.error(error);
+    });
     var __returned__ = {
       store: store,
       props: props,
