@@ -80,4 +80,4 @@ This will run all the Feature and Unit tests available for the project.
 
 ## License
 
-copyright vismedia agency
+copyright Remco Speekenbrink
