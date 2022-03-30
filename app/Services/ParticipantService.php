@@ -12,7 +12,6 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class ParticipantService implements ParticpantServiceContract
 {
-    const PARTICIPANT_SESSION_KEY = 'participant_uuid';
     const PARTICIPANT_GUARD = 'web';
 
     /**
