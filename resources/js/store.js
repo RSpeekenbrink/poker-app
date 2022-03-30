@@ -28,6 +28,16 @@ export const useStore = defineStore('main', {
     },
     setParticipants(participants) {
       this.room.participants = participants;
+    },
+    addParticipant(participant) {
+      this.room.participants.push(participant);
+    },
+    removeParticipant(participant) {
+      const index = this.room.participants.indexOf(participant);
+
+      if (index !== undefined) {
+        this.room.participants.splice(index, 1);
+      }
     }
   },
 
@@ -35,5 +45,6 @@ export const useStore = defineStore('main', {
     currentRoomId: (state) => state.room.id,
     currentRoomName: (state) => state.room.name,
     currentParticipantName: (state) => state.participant.name,
+    getParticipants: (state) => state.room.participants,
   },
 });
