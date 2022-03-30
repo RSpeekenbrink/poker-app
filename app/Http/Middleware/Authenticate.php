@@ -19,7 +19,7 @@ class Authenticate extends Middleware
                 return route('room.join', $roomId);
             }
 
-            return route('index');
+            return route('home');
         }
     }
 }

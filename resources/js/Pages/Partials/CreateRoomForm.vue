@@ -1,6 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/inertia-vue3';
 import TextInput from "@/Components/Form/TextInput";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
 
 const form = useForm({
   room_name: null,
@@ -44,12 +45,9 @@ const submit = () => {
           />
 
           <div>
-            <button @click="submit" class="w-full flex justify-center py-2 px-4 border border-transparent
-                        rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700
-                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
+            <PrimaryButton @click="submit">
               Create Room
-            </button>
+            </PrimaryButton>
           </div>
         </div>
       </div>

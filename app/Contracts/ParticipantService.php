@@ -63,4 +63,11 @@ interface ParticipantService
      * @return bool
      */
     public function isOwner(Room $room, Participant $participant): bool;
+
+    /**
+     * Log current session out.
+     *
+     * @return $this
+     */
+    public function logout(): self;
 }

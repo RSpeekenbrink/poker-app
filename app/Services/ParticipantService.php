@@ -87,4 +87,14 @@ class ParticipantService implements ParticpantServiceContract
 
         return false;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function logout(): ParticpantServiceContract
+    {
+        Auth::guard(self::PARTICIPANT_GUARD)->logout();
+
+        return $this;
+    }
 }

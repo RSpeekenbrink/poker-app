@@ -42,6 +42,7 @@ class RoomChannel
             return [
                 'uuid' => $participant->uuid,
                 'name' => $participant->name,
+                'isOwner' => $this->participantService->isOwner($room, $participant),
             ];
         }
 

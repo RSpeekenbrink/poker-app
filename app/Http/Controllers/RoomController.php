@@ -60,10 +60,13 @@ class RoomController extends Controller
             abort(401); //TODO: Send to login/create new participant
         }
 
+        $room->load('owner');
+
         return Inertia::render('Room/Index', [
             'room' => [
-                'id' => $room->uuid,
+                'uuid' => $room->uuid,
                 'name' => $room->name,
+                'ownerName' => $room->owner->name,
                 'isOwner' => $this->participantService->isOwner($room, $participant),
             ],
             'participant' => [
@@ -102,5 +105,17 @@ class RoomController extends Controller
         $this->participantService->authenticateAs($participant);
 
         return Redirect::route('room.show', $room->uuid);
+    }
+
+    /**
+     *
+     *
+     * @return RedirectResponse
+     */
+    public function leave(): RedirectResponse
+    {
+        $this->participantService->logout();
+
+        return Redirect::route('home');
     }
 }

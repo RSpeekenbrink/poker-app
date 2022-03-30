@@ -8,8 +8,9 @@ export const useStore = defineStore('main', {
         id: null,
       },
       room: {
-        id: null,
+        uuid: null,
         name: null,
+        ownerName: null,
         participants: [],
         isOwner: false,
       }
@@ -21,9 +22,10 @@ export const useStore = defineStore('main', {
       this.participant.name = name;
       this.participant.id = id;
     },
-    setRoom(id, name, isOwner = false) {
-      this.room.id = id;
+    setRoom({uuid, name, ownerName}, isOwner = false) {
+      this.room.uuid = uuid;
       this.room.name = name;
+      this.room.ownerName = ownerName;
       this.room.isOwner = isOwner;
     },
     setParticipants(participants) {
@@ -42,8 +44,9 @@ export const useStore = defineStore('main', {
   },
 
   getters: {
-    currentRoomId: (state) => state.room.id,
+    currentRoomId: (state) => state.room.uuid,
     currentRoomName: (state) => state.room.name,
+    currentRoomOwnerName: (state) => state.room.ownerName,
     currentParticipantName: (state) => state.participant.name,
     getParticipants: (state) => state.room.participants,
   },

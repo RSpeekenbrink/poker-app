@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property Carbon $voting_started_at
  * @property array $votes
  * @property integer $owner_id
+ * @property Participant $owner
  */
 class Room extends Model
 {
