@@ -48,6 +48,7 @@ export const useStore = defineStore('main', {
     currentRoomName: (state) => state.room.name,
     currentRoomOwnerName: (state) => state.room.ownerName,
     currentParticipantName: (state) => state.participant.name,
+    currentIsOwner: (state) => state.room.isOwner,
     getParticipants: (state) => state.room.participants,
   },
 });

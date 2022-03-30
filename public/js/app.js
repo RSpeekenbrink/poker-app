@@ -22353,6 +22353,11 @@ var _hoisted_9 = {
   key: 1,
   "class": "w-full sm:mx-auto sm:max-w-md mt-4"
 };
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Owner ");
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Not owner ");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.store.currentRoomName), 1
   /* TEXT */
@@ -22375,7 +22380,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     participants: $setup.store.getParticipants
   }, null, 8
   /* PROPS */
-  , ["participants"])]))])]);
+  , ["participants"]), $setup.store.currentIsOwner ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 0
+  }, [_hoisted_10], 2112
+  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, [_hoisted_11], 2112
+  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+  ))]))])]);
 }
 
 /***/ }),
@@ -22635,6 +22648,9 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_0__.defineStore)('main', {
     },
     currentParticipantName: function currentParticipantName(state) {
       return state.participant.name;
+    },
+    currentIsOwner: function currentIsOwner(state) {
+      return state.room.isOwner;
     },
     getParticipants: function getParticipants(state) {
       return state.room.participants;

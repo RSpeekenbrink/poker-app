@@ -55,6 +55,13 @@ Echo.join(`room.${store.currentRoomId}`)
 
       <div v-else class="w-full sm:mx-auto sm:max-w-md mt-4">
         <ParticipantsStatus :participants="store.getParticipants" />
+
+        <template v-if="store.currentIsOwner">
+          Owner
+        </template>
+        <template v-else>
+          Not owner
+        </template>
       </div>
     </div>
   </div>
