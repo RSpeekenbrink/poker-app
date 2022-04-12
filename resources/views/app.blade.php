@@ -10,5 +10,7 @@
 </head>
 <body>
 @inertia
+
+<span class="absolute bottom-1 right-1 text-sm text-gray-500">v{{ config('app.version') }}</span>
 </body>
 </html>

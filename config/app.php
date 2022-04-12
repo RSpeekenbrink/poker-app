@@ -32,6 +32,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Version
+    |--------------------------------------------------------------------------
+    |
+    | This value is the version of the application. When not on prod it
+    | will automatically be prefixed with dev.
+    |
+    */
+
+    'version' => env('APP_ENV', 'production') != 'production' ? '1.0.0-dev' : '1.0.0',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |
