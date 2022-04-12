@@ -446,6 +446,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .top-5 {
   top: 1.25rem;
 }
+.bottom-1 {
+  bottom: 0.25rem;
+}
+.right-1 {
+  right: 0.25rem;
+}
 .-my-5 {
   margin-top: -1.25rem;
   margin-bottom: -1.25rem;
@@ -471,6 +477,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .mr-2 {
   margin-right: 0.5rem;
+}
+.mt-5 {
+  margin-top: 1.25rem;
 }
 .block {
   display: block;
@@ -711,6 +720,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-gray-200 {
   --tw-text-opacity: 1;
   color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 .placeholder-red-300::-moz-placeholder {
   --tw-placeholder-opacity: 1;

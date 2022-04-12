@@ -13,6 +13,7 @@ export const useStore = defineStore('main', {
         ownerName: null,
         participants: [],
         isOwner: false,
+        voting: false,
       }
     }
   },
@@ -50,5 +51,6 @@ export const useStore = defineStore('main', {
     currentParticipantName: (state) => state.participant.name,
     currentIsOwner: (state) => state.room.isOwner,
     getParticipants: (state) => state.room.participants,
+    currentlyVoting: (state) => state.room.voting,
   },
 });
