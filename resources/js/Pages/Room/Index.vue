@@ -1,15 +1,33 @@
 <script setup>
 import { useStore } from '@/store';
-import { Link } from '@inertiajs/inertia-vue3';
+import {useForm} from '@inertiajs/inertia-vue3';
 import LogoutButton from "@/Components/Button/LogoutButton";
 import ParticipantsStatus from "@/Components/ParticipantsStatus";
+import TextInput from "@/Components/Form/TextInput";
+import PrimaryButton from "@/Components/Button/PrimaryButton";
+import { ref } from 'vue';
 
 const store = useStore();
+
+let loading = ref(false);
 
 const props = defineProps({
   participant: Object,
   room: Object,
 });
+
+const form = useForm({
+  duration: 15,
+});
+
+const startVoting = () => {
+  loading.value = true;
+
+  form.post(route('room.startVoting', store.currentRoomId), {
+    preserveScroll: true,
+    onSuccess: () => loading.value = false,
+  });
+}
 
 store.setParticipant(props.participant.id, props.participant.name);
 
@@ -28,6 +46,7 @@ Echo.join(`room.${store.currentRoomId}`)
   .error((error) => {
     console.error(error);
   })
+  .listen('.voting.started', () => alert('voting started!'));
 </script>
 
 <template>
@@ -62,11 +81,25 @@ Echo.join(`room.${store.currentRoomId}`)
           </template>
 
           <template v-else-if="store.currentIsOwner">
-            Owner
+            <div class="mx-auto w-2/3 sm:w-1/2">
+              <text-input label="Voting time (seconds)"
+                          v-model="form.duration"
+                          type="number"
+                          :error="form.errors.duration" />
+              <primary-button @click="startVoting"
+                              class="mt-3"
+                              :disabled="loading" >
+                Start vote
+              </primary-button>
+            </div>
           </template>
 
           <template v-else>
-            Not owner
+            <div>
+              <div class="mx-auto w-2/3 sm:w-1/2">
+                Waiting for the Initiator to start voting...
+              </div>
+            </div>
           </template>
         </div>
       </div>

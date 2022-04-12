@@ -9,7 +9,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  modelValue: String,
+  modelValue: [String, Number],
   name: String,
 });
 

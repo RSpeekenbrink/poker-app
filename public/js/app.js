@@ -8015,8 +8015,17 @@ function warn(msg, ...args) {
 let activeEffectScope;
 class EffectScope {
     constructor(detached = false) {
+        /**
+         * @internal
+         */
         this.active = true;
+        /**
+         * @internal
+         */
         this.effects = [];
+        /**
+         * @internal
+         */
         this.cleanups = [];
         if (!detached && activeEffectScope) {
             this.parent = activeEffectScope;
@@ -8026,21 +8035,30 @@ class EffectScope {
     }
     run(fn) {
         if (this.active) {
+            const currentEffectScope = activeEffectScope;
             try {
                 activeEffectScope = this;
                 return fn();
             }
             finally {
-                activeEffectScope = this.parent;
+                activeEffectScope = currentEffectScope;
             }
         }
         else if ((true)) {
             warn(`cannot run an inactive effect scope.`);
         }
     }
+    /**
+     * This should only be called on non-detached scopes
+     * @internal
+     */
     on() {
         activeEffectScope = this;
     }
+    /**
+     * This should only be called on non-detached scopes
+     * @internal
+     */
     off() {
         activeEffectScope = this.parent;
     }
@@ -8269,9 +8287,7 @@ function trackEffects(dep, debuggerEventExtraInfo) {
         dep.add(activeEffect);
         activeEffect.deps.push(dep);
         if (( true) && activeEffect.onTrack) {
-            activeEffect.onTrack(Object.assign({
-                effect: activeEffect
-            }, debuggerEventExtraInfo));
+            activeEffect.onTrack(Object.assign({ effect: activeEffect }, debuggerEventExtraInfo));
         }
     }
 }
@@ -10990,13 +11006,11 @@ function watchEffect(effect, options) {
 }
 function watchPostEffect(effect, options) {
     return doWatch(effect, null, (( true)
-        ? Object.assign(options || {}, { flush: 'post' })
-        : 0));
+        ? Object.assign(Object.assign({}, options), { flush: 'post' }) : 0));
 }
 function watchSyncEffect(effect, options) {
     return doWatch(effect, null, (( true)
-        ? Object.assign(options || {}, { flush: 'sync' })
-        : 0));
+        ? Object.assign(Object.assign({}, options), { flush: 'sync' }) : 0));
 }
 // initial value for watchers to trigger on undefined initial values
 const INITIAL_WATCHER_VALUE = {};
@@ -11311,7 +11325,9 @@ const BaseTransitionImpl = {
             // check mode
             if (( true) &&
                 mode &&
-                mode !== 'in-out' && mode !== 'out-in' && mode !== 'default') {
+                mode !== 'in-out' &&
+                mode !== 'out-in' &&
+                mode !== 'default') {
                 warn(`invalid <transition> mode: ${mode}`);
             }
             // at this point children has a guaranteed length of 1.
@@ -11538,20 +11554,24 @@ function setTransitionHooks(vnode, hooks) {
         vnode.transition = hooks;
     }
 }
-function getTransitionRawChildren(children, keepComment = false) {
+function getTransitionRawChildren(children, keepComment = false, parentKey) {
     let ret = [];
     let keyedFragmentCount = 0;
     for (let i = 0; i < children.length; i++) {
-        const child = children[i];
+        let child = children[i];
+        // #5360 inherit parent key in case of <template v-for>
+        const key = parentKey == null
+            ? child.key
+            : String(parentKey) + String(child.key != null ? child.key : i);
         // handle fragment children case, e.g. v-for
         if (child.type === Fragment) {
             if (child.patchFlag & 128 /* KEYED_FRAGMENT */)
                 keyedFragmentCount++;
-            ret = ret.concat(getTransitionRawChildren(child.children, keepComment));
+            ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
         }
         // comment placeholders should be skipped, e.g. v-if
         else if (keepComment || child.type !== Comment) {
-            ret.push(child);
+            ret.push(key != null ? cloneVNode(child, { key }) : child);
         }
     }
     // #1126 if a transition children list contains multiple sub fragments, these
@@ -12521,6 +12541,10 @@ function updateProps(instance, rawProps, rawPrevProps, optimized) {
             const propsToUpdate = instance.vnode.dynamicProps;
             for (let i = 0; i < propsToUpdate.length; i++) {
                 let key = propsToUpdate[i];
+                // skip if the prop key is a declared emit event listener
+                if (isEmitListener(instance.emitsOptions, key)) {
+                    continue;
+                }
                 // PROPS flag guarantees rawProps to be non-null
                 const value = rawProps[key];
                 if (options) {
@@ -13046,7 +13070,8 @@ function withDirectives(vnode, directives) {
         ( true) && warn(`withDirectives can only be used inside render functions.`);
         return vnode;
     }
-    const instance = internalInstance.proxy;
+    const instance = getExposeProxy(internalInstance) ||
+        internalInstance.proxy;
     const bindings = vnode.dirs || (vnode.dirs = []);
     for (let i = 0; i < directives.length; i++) {
         let [dir, value, arg, modifiers = _vue_shared__WEBPACK_IMPORTED_MODULE_1__.EMPTY_OBJ] = directives[i];
@@ -13118,6 +13143,9 @@ function createAppContext() {
 let uid = 0;
 function createAppAPI(render, hydrate) {
     return function createApp(rootComponent, rootProps = null) {
+        if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isFunction)(rootComponent)) {
+            rootComponent = Object.assign({}, rootComponent);
+        }
         if (rootProps != null && !(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isObject)(rootProps)) {
             ( true) && warn(`root props passed to app.mount() must be an object.`);
             rootProps = null;
@@ -13315,6 +13343,9 @@ function setRef(rawRef, oldRawRef, parentSuspense, vnode, isUnmount = false) {
                         if (!(0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.isArray)(existing)) {
                             if (_isString) {
                                 refs[ref] = [refValue];
+                                if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.hasOwn)(setupState, ref)) {
+                                    setupState[ref] = refs[ref];
+                                }
                             }
                             else {
                                 ref.value = [refValue];
@@ -13691,7 +13722,7 @@ function startMeasure(instance, type) {
         perf.mark(`vue-${type}-${instance.uid}`);
     }
     if (true) {
-        devtoolsPerfStart(instance, type, supported ? perf.now() : Date.now());
+        devtoolsPerfStart(instance, type, isSupported() ? perf.now() : Date.now());
     }
 }
 function endMeasure(instance, type) {
@@ -13704,7 +13735,7 @@ function endMeasure(instance, type) {
         perf.clearMarks(endTag);
     }
     if (true) {
-        devtoolsPerfEnd(instance, type, supported ? perf.now() : Date.now());
+        devtoolsPerfEnd(instance, type, isSupported() ? perf.now() : Date.now());
     }
 }
 function isSupported() {
@@ -16129,9 +16160,10 @@ const PublicInstanceProxyHandlers = {
     },
     defineProperty(target, key, descriptor) {
         if (descriptor.get != null) {
-            this.set(target, key, descriptor.get(), null);
+            // invalidate key cache of a getter based property #5417
+            target.$.accessCache[key] = 0;
         }
-        else if (descriptor.value != null) {
+        else if ((0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.hasOwn)(descriptor, 'value')) {
             this.set(target, key, descriptor.value, null);
         }
         return Reflect.defineProperty(target, key, descriptor);
@@ -17022,7 +17054,7 @@ function isMemoSame(cached, memo) {
 }
 
 // Core API ------------------------------------------------------------------
-const version = "3.2.31";
+const version = "3.2.32";
 const _ssrUtils = {
     createComponentInstance,
     setupComponent,
@@ -21765,7 +21797,7 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       "default": false
     },
-    modelValue: String,
+    modelValue: [String, Number],
     name: String
   },
   emits: ['update:modelValue'],
@@ -21917,6 +21949,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 /* harmony import */ var _Components_Button_LogoutButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/Button/LogoutButton */ "./resources/js/Components/Button/LogoutButton.vue");
 /* harmony import */ var _Components_ParticipantsStatus__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/ParticipantsStatus */ "./resources/js/Components/ParticipantsStatus.vue");
+/* harmony import */ var _Components_Form_TextInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/Form/TextInput */ "./resources/js/Components/Form/TextInput.vue");
+/* harmony import */ var _Components_Button_PrimaryButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/Button/PrimaryButton */ "./resources/js/Components/Button/PrimaryButton.vue");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+
+
+
 
 
 
@@ -21931,6 +21969,21 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props;
     var store = (0,_store__WEBPACK_IMPORTED_MODULE_0__.useStore)();
+    var loading = (0,vue__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
+      duration: 15
+    });
+
+    var startVoting = function startVoting() {
+      loading.value = true;
+      form.post(route('room.startVoting', store.currentRoomId), {
+        preserveScroll: true,
+        onSuccess: function onSuccess() {
+          return loading.value = false;
+        }
+      });
+    };
+
     store.setParticipant(props.participant.id, props.participant.name);
     store.setRoom(props.room, props.room.isOwner);
     Echo.join("room.".concat(store.currentRoomId)).here(function (participants) {
@@ -21941,14 +21994,22 @@ __webpack_require__.r(__webpack_exports__);
       store.removeParticipant(participant);
     }).error(function (error) {
       console.error(error);
+    }).listen('.voting.started', function () {
+      return alert('voting started!');
     });
     var __returned__ = {
       store: store,
+      loading: loading,
       props: props,
+      form: form,
+      startVoting: startVoting,
       useStore: _store__WEBPACK_IMPORTED_MODULE_0__.useStore,
-      Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.Link,
+      useForm: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm,
       LogoutButton: _Components_Button_LogoutButton__WEBPACK_IMPORTED_MODULE_2__["default"],
-      ParticipantsStatus: _Components_ParticipantsStatus__WEBPACK_IMPORTED_MODULE_3__["default"]
+      ParticipantsStatus: _Components_ParticipantsStatus__WEBPACK_IMPORTED_MODULE_3__["default"],
+      TextInput: _Components_Form_TextInput__WEBPACK_IMPORTED_MODULE_4__["default"],
+      PrimaryButton: _Components_Button_PrimaryButton__WEBPACK_IMPORTED_MODULE_5__["default"],
+      ref: vue__WEBPACK_IMPORTED_MODULE_6__.ref
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -22376,10 +22437,24 @@ var _hoisted_11 = {
 
 var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Voting in progress ");
 
-var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Owner ");
+var _hoisted_13 = {
+  key: 1,
+  "class": "mx-auto w-2/3 sm:w-1/2"
+};
 
-var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Not owner ");
+var _hoisted_14 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Start vote ");
 
+var _hoisted_15 = {
+  key: 2
+};
+
+var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "mx-auto w-2/3 sm:w-1/2"
+}, " Waiting for the Initiator to start voting... ", -1
+/* HOISTED */
+);
+
+var _hoisted_17 = [_hoisted_16];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.store.currentRoomName), 1
   /* TEXT */
@@ -22393,15 +22468,30 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     key: 0
   }, [_hoisted_12], 2112
   /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  )) : $setup.store.currentIsOwner ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: 1
-  }, [_hoisted_13], 2112
-  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  )) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: 2
-  }, [_hoisted_14], 2112
-  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
-  ))])]))])]);
+  )) : $setup.store.currentIsOwner ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["TextInput"], {
+    label: "Voting time (seconds)",
+    modelValue: $setup.form.duration,
+    "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
+      return $setup.form.duration = $event;
+    }),
+    type: "number",
+    error: $setup.form.errors.duration
+  }, null, 8
+  /* PROPS */
+  , ["modelValue", "error"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["PrimaryButton"], {
+    onClick: $setup.startVoting,
+    "class": "mt-3",
+    disabled: $setup.loading
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_14];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["disabled"])])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15, _hoisted_17))])]))])]);
 }
 
 /***/ }),
@@ -46888,7 +46978,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_demi__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-demi */ "./node_modules/pinia/node_modules/vue-demi/lib/index.mjs");
 /* harmony import */ var _vue_devtools_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/devtools-api */ "./node_modules/@vue/devtools-api/lib/esm/index.js");
 /*!
-  * pinia v2.0.12
+  * pinia v2.0.13
   * (c) 2022 Eduardo San Martin Morote
   * @license MIT
   */
@@ -47943,7 +48033,7 @@ function acceptHMRUpdate(initialUseStore, hot) {
                 }
                 const existingStore = pinia._s.get(id);
                 if (!existingStore) {
-                    console.log(`skipping hmr because store doesn't exist yet`);
+                    console.log(`[Pinia]: skipping hmr because store doesn't exist yet`);
                     return;
                 }
                 useStore(pinia, existingStore);
@@ -47976,10 +48066,13 @@ function triggerSubscriptions(subscriptions, ...args) {
 function mergeReactiveObjects(target, patchToApply) {
     // no need to go through symbols because they cannot be serialized anyway
     for (const key in patchToApply) {
+        if (!patchToApply.hasOwnProperty(key))
+            continue;
         const subPatch = patchToApply[key];
         const targetValue = target[key];
         if (isPlainObject(targetValue) &&
             isPlainObject(subPatch) &&
+            target.hasOwnProperty(key) &&
             !(0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.isRef)(subPatch) &&
             !(0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.isReactive)(subPatch)) {
             target[key] = mergeReactiveObjects(targetValue, subPatch);
@@ -48722,23 +48815,26 @@ function mapWritableState(useStore, keysOrMapper) {
  * @param store - store to extract the refs from
  */
 function storeToRefs(store) {
-    if (( true) && vue_demi__WEBPACK_IMPORTED_MODULE_0__.isVue2) {
-        console.warn('[Pinia]: "storeToRefs()" currently only works on Vue 3 until https://github.com/vuejs/pinia/issues/852 is fixed. Please, use "toRefs()" (from vue) instead. This will FAIL in production if not changed.');
+    // See https://github.com/vuejs/pinia/issues/852
+    // It's easier to just use toRefs() even if it includes more stuff
+    if (vue_demi__WEBPACK_IMPORTED_MODULE_0__.isVue2) {
         // @ts-expect-error: toRefs include methods and others
         return (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.toRefs)(store);
     }
-    store = (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.toRaw)(store);
-    const refs = {};
-    for (const key in store) {
-        const value = store[key];
-        if ((0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.isRef)(value) || (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.isReactive)(value)) {
-            // @ts-expect-error: the key is state or getter
-            refs[key] =
-                // ---
-                (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.toRef)(store, key);
+    else {
+        store = (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.toRaw)(store);
+        const refs = {};
+        for (const key in store) {
+            const value = store[key];
+            if ((0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.isRef)(value) || (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.isReactive)(value)) {
+                // @ts-expect-error: the key is state or getter
+                refs[key] =
+                    // ---
+                    (0,vue_demi__WEBPACK_IMPORTED_MODULE_0__.toRef)(store, key);
+            }
         }
+        return refs;
     }
-    return refs;
 }
 
 /**

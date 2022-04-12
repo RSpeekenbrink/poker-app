@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property integer $id
  * @property string $uuid
  * @property string $name
- * @property boolean $voting
+ * @property integer $voting_duration
  * @property Carbon $voting_started_at
  * @property array $votes
  * @property integer $owner_id
@@ -37,7 +37,7 @@ class Room extends Model
     protected $fillable = [
         'uuid',
         'name',
-        'voting',
+        'voting_duration',
         'voting_started_at',
         'votes',
     ];

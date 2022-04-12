@@ -437,6 +437,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   top: 0px;
   bottom: 0px;
 }
+.bottom-1 {
+  bottom: 0.25rem;
+}
+.right-1 {
+  right: 0.25rem;
+}
 .right-0 {
   right: 0px;
 }
@@ -445,12 +451,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .top-5 {
   top: 1.25rem;
-}
-.bottom-1 {
-  bottom: 0.25rem;
-}
-.right-1 {
-  right: 0.25rem;
 }
 .-my-5 {
   margin-top: -1.25rem;
@@ -480,6 +480,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .mt-5 {
   margin-top: 1.25rem;
+}
+.mt-3 {
+  margin-top: 0.75rem;
 }
 .block {
   display: block;
@@ -516,6 +519,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-1\/2 {
   width: 50%;
+}
+.w-2\/3 {
+  width: 66.666667%;
 }
 .min-w-0 {
   min-width: 0px;
@@ -685,6 +691,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .leading-4 {
   line-height: 1rem;
 }
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
+}
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
@@ -720,10 +730,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-gray-200 {
   --tw-text-opacity: 1;
   color: rgb(229 231 235 / var(--tw-text-opacity));
-}
-.text-gray-500 {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 .placeholder-red-300::-moz-placeholder {
   --tw-placeholder-opacity: 1;
@@ -819,6 +825,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
   .sm\:w-full {
     width: 100%;
+  }
+
+  .sm\:w-1\/2 {
+    width: 50%;
   }
 
   .sm\:max-w-md {

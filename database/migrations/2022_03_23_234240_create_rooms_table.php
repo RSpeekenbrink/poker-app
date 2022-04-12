@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->uuid();
             $table->text('name');
-            $table->boolean('voting')->default(false);
             $table->timestamp('voting_started_at')->nullable();
+            $table->integer('voting_duration')->nullable();
             $table->json('votes')->nullable();
             $table->timestamps();
         });

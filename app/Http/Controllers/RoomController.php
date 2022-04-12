@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ParticipantService;
 use App\Contracts\RoomService;
+use App\Events\StartedVoting;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\JoinRequest;
+use App\Http\Requests\StartVotingRequest;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -108,7 +111,7 @@ class RoomController extends Controller
     }
 
     /**
-     *
+     * Leave current joined room by logging the user out.
      *
      * @return RedirectResponse
      */
@@ -117,5 +120,25 @@ class RoomController extends Controller
         $this->participantService->logout();
 
         return Redirect::route('home');
+    }
+
+    /**
+     * Start voting for the given room
+     *
+     * @param StartVotingRequest $request
+     * @param Room $room
+     * @return RedirectResponse
+     */
+    public function startVoting(StartVotingRequest $request, Room $room): RedirectResponse
+    {
+        $room->update([
+            'voting_duration' => $request->duration,
+            'voting_started_at' => Carbon::now(),
+            'votes' => [],
+        ]);
+
+        StartedVoting::dispatch($room);
+
+        return back();
     }
 }

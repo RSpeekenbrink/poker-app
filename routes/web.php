@@ -24,4 +24,5 @@ Route::post('/leave', [RoomController::class, 'leave'])->name('room.leave');
 Route::post('/create-room', [RoomController::class, 'create'])->name('room.create');
 Route::get('/{room}/join', [RoomController::class, 'showJoin'])->middleware('guest')->name('room.join');
 Route::post('/{room}/join', [RoomController::class, 'join'])->middleware('guest')->name('room.join.attempt');
+Route::post('/{room}/start-voting', [RoomController::class, 'startVoting'])->middleware('auth')->name('room.startVoting');
 Route::get('/{room}', [RoomController::class, 'show'])->middleware('auth')->name('room.show');
