@@ -21987,7 +21987,7 @@ __webpack_require__.r(__webpack_exports__);
 
       votingSecondsLeft.value = voteEnd.diff(moment__WEBPACK_IMPORTED_MODULE_7___default()(), 'seconds');
       currentlyVoting.value = votingSecondsLeft.value > 0;
-    }, 1000);
+    }, 100);
     store.setParticipant(props.participant.id, props.participant.name);
     store.setRoom(props.room, props.room.isOwner);
     store.openChannel();

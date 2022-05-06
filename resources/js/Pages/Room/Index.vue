@@ -46,7 +46,7 @@ setInterval(() => {
 
   votingSecondsLeft.value = voteEnd.diff(moment(), 'seconds');
   currentlyVoting.value = votingSecondsLeft.value > 0;
-}, 1000)
+}, 100)
 
 store.setParticipant(props.participant.id, props.participant.name);
 
