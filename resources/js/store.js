@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import moment from "moment";
 
 export const useStore = defineStore('main', {
   state: () => {
@@ -14,8 +15,9 @@ export const useStore = defineStore('main', {
         ownerName: null,
         participants: [],
         isOwner: false,
-        voting: false,
-      }
+        votingStartedAt: null,
+        votingDuration: null,
+      },
     }
   },
 
@@ -24,11 +26,13 @@ export const useStore = defineStore('main', {
       this.participant.name = name;
       this.participant.id = id;
     },
-    setRoom({uuid, name, ownerName}, isOwner = false) {
+    setRoom({uuid, name, ownerName, votingStartedAt, votingDuration}, isOwner = false) {
       this.room.uuid = uuid;
       this.room.name = name;
       this.room.ownerName = ownerName;
       this.room.isOwner = isOwner;
+      this.room.votingStartedAt = votingStartedAt;
+      this.room.votingDuration = votingDuration;
     },
     setParticipants(participants) {
       this.room.participants = participants;
@@ -74,6 +78,10 @@ export const useStore = defineStore('main', {
 
       this.currentChannel.listen(event, callback);
     },
+    startVoting(startTime, duration) {
+      this.room.votingStartedAt = startTime;
+      this.room.votingDuration = duration;
+    }
   },
 
   getters: {
@@ -83,6 +91,16 @@ export const useStore = defineStore('main', {
     currentParticipantName: (state) => state.participant.name,
     currentIsOwner: (state) => state.room.isOwner,
     getParticipants: (state) => state.room.participants,
-    currentlyVoting: (state) => state.room.voting,
+    getVoteEndTime: (state) => {
+      if (!state.room.votingStartedAt) {
+        return null;
+      }
+
+      if (!state.room.votingDuration) {
+        return moment(state.room.votingStartedAt);
+      }
+
+      return moment(state.room.votingStartedAt).add(state.room.votingDuration, 'seconds');
+    },
   },
 });

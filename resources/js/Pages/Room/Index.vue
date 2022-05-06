@@ -6,6 +6,7 @@ import ParticipantsStatus from "@/Components/ParticipantsStatus";
 import TextInput from "@/Components/Form/TextInput";
 import PrimaryButton from "@/Components/Button/PrimaryButton";
 import { ref } from 'vue';
+import moment from "moment";
 
 const store = useStore();
 
@@ -29,13 +30,31 @@ const startVoting = () => {
   });
 }
 
+const votingStarted = (event) => {
+  store.startVoting(event.time, event.duration);
+}
+
+let currentlyVoting = ref(false);
+let votingSecondsLeft = ref(0);
+
+setInterval(() => {
+  let voteEnd = store.getVoteEndTime;
+
+  if (!voteEnd) {
+    currentlyVoting.value = false;
+  }
+
+  votingSecondsLeft.value = voteEnd.diff(moment(), 'seconds');
+  currentlyVoting.value = votingSecondsLeft.value > 0;
+}, 1000)
+
 store.setParticipant(props.participant.id, props.participant.name);
 
 store.setRoom(props.room, props.room.isOwner);
 
 store.openChannel();
 
-store.listenOnChannel('.voting.started', () => alert('voting started!'));
+store.listenOnChannel('.voting.started', votingStarted);
 </script>
 
 <template>
@@ -65,8 +84,8 @@ store.listenOnChannel('.voting.started', () => alert('voting started!'));
         <ParticipantsStatus :participants="store.getParticipants" />
 
         <div class="mt-5">
-          <template v-if="store.currentlyVoting">
-            Voting in progress
+          <template v-if="currentlyVoting">
+            Voting in progress, seconds left: {{ votingSecondsLeft }}
           </template>
 
           <template v-else-if="store.currentIsOwner">

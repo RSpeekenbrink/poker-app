@@ -17,6 +17,13 @@ use Inertia\Response;
 
 class RoomController extends Controller
 {
+    /**
+     * Compensation in seconds for time it takes to process the request.
+     *
+     * @var int
+     */
+    const REQUEST_VOTING_DURATION_COMPENSATION = 3;
+
     /** @var ParticipantService */
     protected ParticipantService $participantService;
 
@@ -71,6 +78,8 @@ class RoomController extends Controller
                 'name' => $room->name,
                 'ownerName' => $room->owner->name,
                 'isOwner' => $this->participantService->isOwner($room, $participant),
+                'votingStartedAt' => $room->voting_started_at,
+                'votingDuration' => $room->voting_duration,
             ],
             'participant' => [
                 'id' => $participant->uuid,
@@ -133,7 +142,7 @@ class RoomController extends Controller
     {
         $room->update([
             'voting_duration' => $request->duration,
-            'voting_started_at' => Carbon::now(),
+            'voting_started_at' => Carbon::now()->addSeconds(self::REQUEST_VOTING_DURATION_COMPENSATION),
             'votes' => [],
         ]);
 
