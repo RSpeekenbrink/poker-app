@@ -31,7 +31,10 @@ const submit = () => {
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <div class="space-y-6">
+        <form
+          @submit.prevent="submit"
+          class="space-y-6"
+        >
           <text-input label="Room name"
                       name="room_name"
                       v-model="form.room_name"
@@ -42,6 +45,7 @@ const submit = () => {
                       name="name"
                       v-model="form.name"
                       :error="form.errors.name"
+                      @keyup.enter="submit"
           />
 
           <div>
@@ -49,7 +53,7 @@ const submit = () => {
               Create Room
             </PrimaryButton>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
