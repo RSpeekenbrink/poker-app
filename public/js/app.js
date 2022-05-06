@@ -21719,17 +21719,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @heroicons/vue/solid */ "./node_modules/@heroicons/vue/solid/esm/LogoutIcon.js");
-/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @heroicons/vue/solid */ "./node_modules/@heroicons/vue/solid/esm/LogoutIcon.js");
+/* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/store */ "./resources/js/store.js");
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();
+    var store = (0,_store__WEBPACK_IMPORTED_MODULE_1__.useStore)();
+
+    var logout = function logout() {
+      // Forget session in SPA and unsubscribe from room.
+      store.closeChannel(); // Post to logout route to logout session.
+
+      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__.Inertia.post(route('room.leave'));
+    };
+
     var __returned__ = {
-      LogoutIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__["default"],
-      Link: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__.Link
+      store: store,
+      logout: logout,
+      LogoutIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__["default"],
+      Inertia: _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_0__.Inertia,
+      useStore: _store__WEBPACK_IMPORTED_MODULE_1__.useStore
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -21757,7 +21771,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @heroicons/vue/solid */ "./node_modules/@heroicons/vue/solid/esm/ExclamationCircleIcon.js");
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+var __default__ = {
+  inheritAttrs: false
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
   props: {
     error: String,
     label: String,
@@ -21786,7 +21803,7 @@ __webpack_require__.r(__webpack_exports__);
     });
     return __returned__;
   }
-});
+}));
 
 /***/ }),
 
@@ -21954,15 +21971,8 @@ __webpack_require__.r(__webpack_exports__);
 
     store.setParticipant(props.participant.id, props.participant.name);
     store.setRoom(props.room, props.room.isOwner);
-    Echo.join("room.".concat(store.currentRoomId)).here(function (participants) {
-      store.setParticipants(participants);
-    }).joining(function (participant) {
-      store.addParticipant(participant);
-    }).leaving(function (participant) {
-      store.removeParticipant(participant);
-    }).error(function (error) {
-      console.error(error);
-    }).listen('.voting.started', function () {
+    store.openChannel();
+    store.listenOnChannel('.voting.started', function () {
       return alert('voting started!');
     });
     var __returned__ = {
@@ -22089,24 +22099,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Link"], {
-    type: "button",
-    as: "button",
-    href: _ctx.route('room.leave'),
-    method: "post",
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+    onClick: $setup.logout,
     "class": "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-500 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["LogoutIcon"], {
-        "class": "h-5 w-5"
-      })];
-    }),
-    _: 1
-    /* STABLE */
-
-  }, 8
-  /* PROPS */
-  , ["href"]);
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["LogoutIcon"], {
+    "class": "h-5 w-5"
+  })]);
 }
 
 /***/ }),
@@ -22302,15 +22300,14 @@ var _hoisted_3 = {
 var _hoisted_4 = {
   "class": "bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10"
 };
-var _hoisted_5 = ["onSubmit"];
+var _hoisted_5 = {
+  "class": "space-y-6"
+};
 
 var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Create Room ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-    onSubmit: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.submit, ["prevent"]),
-    "class": "space-y-6"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["TextInput"], {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["TextInput"], {
     label: "Room name",
     name: "room_name",
     modelValue: $setup.form.room_name,
@@ -22340,9 +22337,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })])], 40
-  /* PROPS, HYDRATE_EVENTS */
-  , _hoisted_5)])])]);
+  })])])])])]);
 }
 
 /***/ }),
@@ -22533,27 +22528,27 @@ var _hoisted_5 = {
 var _hoisted_6 = {
   "class": "bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10"
 };
-var _hoisted_7 = ["onSubmit"];
+var _hoisted_7 = {
+  "class": "space-y-6"
+};
 
 var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Join Room ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_3, "Join " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.room.name), 1
   /* TEXT */
-  ), _hoisted_4]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
-    onSubmit: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)($setup.submit, ["prevent"]),
-    "class": "space-y-6"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["TextInput"], {
+  ), _hoisted_4]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["TextInput"], {
     label: "Your name",
     name: "name",
     modelValue: $setup.form.name,
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $setup.form.name = $event;
     }),
-    error: $setup.form.errors.name
+    error: $setup.form.errors.name,
+    onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)($setup.submit, ["enter"])
   }, null, 8
   /* PROPS */
-  , ["modelValue", "error"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["PrimaryButton"], {
+  , ["modelValue", "error", "onKeyup"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["PrimaryButton"], {
     onClick: $setup.submit
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -22562,9 +22557,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
     /* STABLE */
 
-  })])], 40
-  /* PROPS, HYDRATE_EVENTS */
-  , _hoisted_7)])])]);
+  })])])])])]);
 }
 
 /***/ }),
@@ -22672,6 +22665,7 @@ __webpack_require__.r(__webpack_exports__);
 var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_0__.defineStore)('main', {
   state: function state() {
     return {
+      currentChannel: null,
       participant: {
         name: null,
         id: null
@@ -22713,6 +22707,35 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_0__.defineStore)('main', {
       if (index !== undefined) {
         this.room.participants.splice(index, 1);
       }
+    },
+    openChannel: function openChannel() {
+      var _this = this;
+
+      this.currentChannel = Echo.join("room.".concat(this.room.uuid)).here(function (participants) {
+        _this.setParticipants(participants);
+      }).joining(function (participant) {
+        _this.addParticipant(participant);
+      }).leaving(function (participant) {
+        _this.removeParticipant(participant);
+      }).error(function (error) {
+        console.error(error);
+      });
+    },
+    closeChannel: function closeChannel() {
+      if (!this.currentChannel) {
+        return;
+      }
+
+      Echo.leave("room.".concat(this.room.uuid));
+      this.currentChannel = null;
+    },
+    listenOnChannel: function listenOnChannel(event, callback) {
+      if (!this.currentChannel) {
+        console.error('Currently no channel to listen to!');
+        return;
+      }
+
+      this.currentChannel.listen(event, callback);
     }
   },
   getters: {

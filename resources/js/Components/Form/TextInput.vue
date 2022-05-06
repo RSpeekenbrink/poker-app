@@ -1,3 +1,9 @@
+<script>
+export default {
+  inheritAttrs: false
+}
+</script>
+
 <script setup>
 import { uniqueId } from "lodash";
 import { ExclamationCircleIcon } from '@heroicons/vue/solid'
@@ -33,7 +39,6 @@ const id = uniqueId('input_');
                       'focus:ring-red-500 focus:border-red-500' : 'placeholder-gray-400 focus:ring-indigo-500' +
                        'border-gray-300 focus:border-indigo-500'"
              v-bind="$attrs"
-
       />
       <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none" v-if="error">
         <exclamation-circle-icon class="h-5 w-5 text-red-500" aria-hidden="true" />

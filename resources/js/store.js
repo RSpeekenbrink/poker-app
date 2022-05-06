@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useStore = defineStore('main', {
   state: () => {
     return {
+      currentChannel: null,
       participant: {
         name: null,
         id: null,
@@ -41,7 +42,38 @@ export const useStore = defineStore('main', {
       if (index !== undefined) {
         this.room.participants.splice(index, 1);
       }
-    }
+    },
+    openChannel() {
+      this.currentChannel = Echo.join(`room.${this.room.uuid}`)
+        .here((participants) => {
+          this.setParticipants(participants);
+        })
+        .joining((participant) => {
+          this.addParticipant(participant);
+        })
+        .leaving((participant) => {
+          this.removeParticipant(participant);
+        })
+        .error((error) => {
+          console.error(error);
+        });
+    },
+    closeChannel() {
+      if (!this.currentChannel) {
+        return;
+      }
+
+      Echo.leave(`room.${this.room.uuid}`);
+      this.currentChannel = null;
+    },
+    listenOnChannel(event, callback) {
+      if (!this.currentChannel) {
+        console.error('Currently no channel to listen to!');
+        return;
+      }
+
+      this.currentChannel.listen(event, callback);
+    },
   },
 
   getters: {

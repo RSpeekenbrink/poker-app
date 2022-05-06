@@ -33,20 +33,9 @@ store.setParticipant(props.participant.id, props.participant.name);
 
 store.setRoom(props.room, props.room.isOwner);
 
-Echo.join(`room.${store.currentRoomId}`)
-  .here((participants) => {
-    store.setParticipants(participants);
-  })
-  .joining((participant) => {
-    store.addParticipant(participant);
-  })
-  .leaving((participant) => {
-    store.removeParticipant(participant);
-  })
-  .error((error) => {
-    console.error(error);
-  })
-  .listen('.voting.started', () => alert('voting started!'));
+store.openChannel();
+
+store.listenOnChannel('.voting.started', () => alert('voting started!'));
 </script>
 
 <template>
