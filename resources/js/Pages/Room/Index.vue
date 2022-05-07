@@ -58,6 +58,7 @@ setInterval(() => {
 
   if (!voteEnd) {
     currentlyVoting.value = false;
+    return;
   }
 
   votingSecondsLeft.value = voteEnd.diff(moment(), 'seconds');

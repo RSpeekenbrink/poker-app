@@ -21999,6 +21999,7 @@ __webpack_require__.r(__webpack_exports__);
 
       if (!voteEnd) {
         currentlyVoting.value = false;
+        return;
       }
 
       votingSecondsLeft.value = voteEnd.diff(moment__WEBPACK_IMPORTED_MODULE_7___default()(), 'seconds');
@@ -22273,7 +22274,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "h-8 w-8 rounded-full"
     })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(participant.name), 1
     /* TEXT */
-    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$props$votes$partici = $props.votes[participant.uuid]) !== null && _$props$votes$partici !== void 0 ? _$props$votes$partici : '-'), 1
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.votes ? (_$props$votes$partici = $props.votes[participant.uuid]) !== null && _$props$votes$partici !== void 0 ? _$props$votes$partici : '-' : '-'), 1
     /* TEXT */
     )])])]);
   }), 128
