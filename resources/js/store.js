@@ -17,7 +17,9 @@ export const useStore = defineStore('main', {
         isOwner: false,
         votingStartedAt: null,
         votingDuration: null,
+        votes: [],
       },
+      votingOptions: [],
     }
   },
 
@@ -26,13 +28,14 @@ export const useStore = defineStore('main', {
       this.participant.name = name;
       this.participant.id = id;
     },
-    setRoom({uuid, name, ownerName, votingStartedAt, votingDuration}, isOwner = false) {
+    setRoom({uuid, name, ownerName, votingStartedAt, votingDuration, votes}, isOwner = false) {
       this.room.uuid = uuid;
       this.room.name = name;
       this.room.ownerName = ownerName;
       this.room.isOwner = isOwner;
       this.room.votingStartedAt = votingStartedAt;
       this.room.votingDuration = votingDuration;
+      this.room.votes = votes;
     },
     setParticipants(participants) {
       this.room.participants = participants;
@@ -81,6 +84,12 @@ export const useStore = defineStore('main', {
     startVoting(startTime, duration) {
       this.room.votingStartedAt = startTime;
       this.room.votingDuration = duration;
+    },
+    setVotingOptions(options) {
+      this.votingOptions = options;
+    },
+    setVotes(votes) {
+      this.room.votes = votes;
     }
   },
 
@@ -91,6 +100,8 @@ export const useStore = defineStore('main', {
     currentParticipantName: (state) => state.participant.name,
     currentIsOwner: (state) => state.room.isOwner,
     getParticipants: (state) => state.room.participants,
+    getVotingOptions: (state) => state.votingOptions,
+    getCurrentVotes: (state) => state.room.votes,
     getVoteEndTime: (state) => {
       if (!state.room.votingStartedAt) {
         return null;

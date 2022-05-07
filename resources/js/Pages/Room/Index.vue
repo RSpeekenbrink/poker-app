@@ -15,10 +15,15 @@ let loading = ref(false);
 const props = defineProps({
   participant: Object,
   room: Object,
+  votingOptions: Array,
 });
 
 const form = useForm({
   duration: 15,
+});
+
+const voteForm = useForm({
+  vote: null,
 });
 
 const startVoting = () => {
@@ -30,8 +35,19 @@ const startVoting = () => {
   });
 }
 
+const vote = () => {
+  voteForm.post(route('room.vote', store.currentRoomId), {
+    preserveScroll: true,
+  });
+}
+
 const votingStarted = (event) => {
   store.startVoting(event.time, event.duration);
+  store.setVotes({});
+}
+
+const voted = (event) => {
+  store.setVotes(event.votes);
 }
 
 let currentlyVoting = ref(false);
@@ -52,9 +68,12 @@ store.setParticipant(props.participant.id, props.participant.name);
 
 store.setRoom(props.room, props.room.isOwner);
 
+store.setVotingOptions(props.votingOptions);
+
 store.openChannel();
 
 store.listenOnChannel('.voting.started', votingStarted);
+store.listenOnChannel('.voting.voted', voted);
 </script>
 
 <template>
@@ -81,11 +100,15 @@ store.listenOnChannel('.voting.started', votingStarted);
       </div>
 
       <div v-else class="w-full sm:mx-auto sm:max-w-md mt-4">
-        <ParticipantsStatus :participants="store.getParticipants" />
+        <ParticipantsStatus :participants="store.getParticipants" :votes="store.getCurrentVotes" />
 
         <div class="mt-5">
           <template v-if="currentlyVoting">
             Voting in progress, seconds left: {{ votingSecondsLeft }}
+
+            <template v-for="option in store.getVotingOptions">
+              <primary-button @click="voteForm.vote = option; vote()" class="mb-5">{{ option }}</primary-button>
+            </template>
           </template>
 
           <template v-else-if="store.currentIsOwner">

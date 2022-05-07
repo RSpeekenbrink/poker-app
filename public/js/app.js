@@ -21822,7 +21822,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    participants: Array
+    participants: Array,
+    votes: Object
   },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
@@ -21950,7 +21951,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     participant: Object,
-    room: Object
+    room: Object,
+    votingOptions: Array
   },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
@@ -21960,6 +21962,9 @@ __webpack_require__.r(__webpack_exports__);
     var loading = (0,vue__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
       duration: 15
+    });
+    var voteForm = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
+      vote: null
     });
 
     var startVoting = function startVoting() {
@@ -21972,8 +21977,19 @@ __webpack_require__.r(__webpack_exports__);
       });
     };
 
+    var vote = function vote() {
+      voteForm.post(route('room.vote', store.currentRoomId), {
+        preserveScroll: true
+      });
+    };
+
     var votingStarted = function votingStarted(event) {
       store.startVoting(event.time, event.duration);
+      store.setVotes({});
+    };
+
+    var voted = function voted(event) {
+      store.setVotes(event.votes);
     };
 
     var currentlyVoting = (0,vue__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
@@ -21990,15 +22006,20 @@ __webpack_require__.r(__webpack_exports__);
     }, 100);
     store.setParticipant(props.participant.id, props.participant.name);
     store.setRoom(props.room, props.room.isOwner);
+    store.setVotingOptions(props.votingOptions);
     store.openChannel();
     store.listenOnChannel('.voting.started', votingStarted);
+    store.listenOnChannel('.voting.voted', voted);
     var __returned__ = {
       store: store,
       loading: loading,
       props: props,
       form: form,
+      voteForm: voteForm,
       startVoting: startVoting,
+      vote: vote,
       votingStarted: votingStarted,
+      voted: voted,
       currentlyVoting: currentlyVoting,
       votingSecondsLeft: votingSecondsLeft,
       useStore: _store__WEBPACK_IMPORTED_MODULE_0__.useStore,
@@ -22238,15 +22259,13 @@ var _hoisted_5 = {
 var _hoisted_6 = {
   "class": "text-sm font-medium text-gray-900 truncate"
 };
-
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+var _hoisted_7 = {
   "class": "inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-}, " - ")], -1
-/* HOISTED */
-);
-
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_2, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.participants, function (participant) {
+    var _$props$votes$partici;
+
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       key: participant.id,
       "class": "py-4"
@@ -22254,7 +22273,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "h-8 w-8 rounded-full"
     })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(participant.name), 1
     /* TEXT */
-    )]), _hoisted_7])]);
+    )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$props$votes$partici = $props.votes[participant.uuid]) !== null && _$props$votes$partici !== void 0 ? _$props$votes$partici : '-'), 1
+    /* TEXT */
+    )])])]);
   }), 128
   /* KEYED_FRAGMENT */
   ))])])]);
@@ -22446,15 +22467,37 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_5, " Initiator: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.store.currentRoomOwnerName), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["LogoutButton"])])]), !$setup.store.getParticipants.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, _hoisted_9)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["ParticipantsStatus"], {
-    participants: $setup.store.getParticipants
+    participants: $setup.store.getParticipants,
+    votes: $setup.store.getCurrentVotes
   }, null, 8
   /* PROPS */
-  , ["participants"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [$setup.currentlyVoting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  , ["participants", "votes"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [$setup.currentlyVoting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 0
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Voting in progress, seconds left: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.votingSecondsLeft), 1
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Voting in progress, seconds left: " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.votingSecondsLeft) + " ", 1
   /* TEXT */
-  )], 2112
-  /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+  ), ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.store.getVotingOptions, function (option) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["PrimaryButton"], {
+      onClick: function onClick($event) {
+        $setup.voteForm.vote = option;
+        $setup.vote();
+      },
+      "class": "mb-5"
+    }, {
+      "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+        return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(option), 1
+        /* TEXT */
+        )];
+      }),
+      _: 2
+      /* DYNAMIC */
+
+    }, 1032
+    /* PROPS, DYNAMIC_SLOTS */
+    , ["onClick"]);
+  }), 256
+  /* UNKEYED_FRAGMENT */
+  ))], 64
+  /* STABLE_FRAGMENT */
   )) : $setup.store.currentIsOwner ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["TextInput"], {
     label: "Voting time (seconds)",
     modelValue: $setup.form.duration,
@@ -22700,8 +22743,10 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('main', {
         participants: [],
         isOwner: false,
         votingStartedAt: null,
-        votingDuration: null
-      }
+        votingDuration: null,
+        votes: []
+      },
+      votingOptions: []
     };
   },
   actions: {
@@ -22714,7 +22759,8 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('main', {
           name = _ref.name,
           ownerName = _ref.ownerName,
           votingStartedAt = _ref.votingStartedAt,
-          votingDuration = _ref.votingDuration;
+          votingDuration = _ref.votingDuration,
+          votes = _ref.votes;
       var isOwner = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       this.room.uuid = uuid;
       this.room.name = name;
@@ -22722,6 +22768,7 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('main', {
       this.room.isOwner = isOwner;
       this.room.votingStartedAt = votingStartedAt;
       this.room.votingDuration = votingDuration;
+      this.room.votes = votes;
     },
     setParticipants: function setParticipants(participants) {
       this.room.participants = participants;
@@ -22768,6 +22815,12 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('main', {
     startVoting: function startVoting(startTime, duration) {
       this.room.votingStartedAt = startTime;
       this.room.votingDuration = duration;
+    },
+    setVotingOptions: function setVotingOptions(options) {
+      this.votingOptions = options;
+    },
+    setVotes: function setVotes(votes) {
+      this.room.votes = votes;
     }
   },
   getters: {
@@ -22788,6 +22841,12 @@ var useStore = (0,pinia__WEBPACK_IMPORTED_MODULE_1__.defineStore)('main', {
     },
     getParticipants: function getParticipants(state) {
       return state.room.participants;
+    },
+    getVotingOptions: function getVotingOptions(state) {
+      return state.votingOptions;
+    },
+    getCurrentVotes: function getCurrentVotes(state) {
+      return state.room.votes;
     },
     getVoteEndTime: function getVoteEndTime(state) {
       if (!state.room.votingStartedAt) {

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::bind('room', function ($value) {
     return app(RoomService::class)->getByUuid($value);
+
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -25,4 +26,5 @@ Route::post('/create-room', [RoomController::class, 'create'])->name('room.creat
 Route::get('/{room}/join', [RoomController::class, 'showJoin'])->middleware('guest')->name('room.join');
 Route::post('/{room}/join', [RoomController::class, 'join'])->middleware('guest')->name('room.join.attempt');
 Route::post('/{room}/start-voting', [RoomController::class, 'startVoting'])->middleware('auth')->name('room.startVoting');
+Route::post('/{room}/vote', [RoomController::class, 'vote'])->middleware('auth')->name('room.vote');
 Route::get('/{room}', [RoomController::class, 'show'])->middleware('auth')->name('room.show');

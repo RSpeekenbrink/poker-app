@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Contracts\ParticipantService;
 use App\Contracts\RoomService;
 use App\Events\StartedVoting;
+use App\Events\Voted;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\JoinRequest;
 use App\Http\Requests\StartVotingRequest;
+use App\Http\Requests\VoteRequest;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -80,11 +83,13 @@ class RoomController extends Controller
                 'isOwner' => $this->participantService->isOwner($room, $participant),
                 'votingStartedAt' => $room->voting_started_at,
                 'votingDuration' => $room->voting_duration,
+                'votes' => $room->votes,
             ],
             'participant' => [
                 'id' => $participant->uuid,
                 'name' => $participant->name,
-            ]
+            ],
+            'votingOptions' => $this->roomService->getVotingOptions(),
         ]);
     }
 
@@ -147,6 +152,30 @@ class RoomController extends Controller
         ]);
 
         StartedVoting::dispatch($room);
+
+        return back();
+    }
+
+    /**
+     * Cast a vote for a given room.
+     *
+     * @param VoteRequest $request
+     * @param Room $room
+     * @return RedirectResponse
+     */
+    public function vote(VoteRequest $request, Room $room): RedirectResponse
+    {
+        $participant = $this->participantService->getFromSession();
+        $lock = Cache::lock('voting.'.$room->uuid, 10);
+
+        $lock->get(function () use ($room, $request, $participant) {
+            $votes = $room->votes;
+            $votes[$participant->uuid] = $request->vote;
+
+            $room->update(['votes' => $votes]);
+
+            Voted::dispatch($room);
+        });
 
         return back();
     }

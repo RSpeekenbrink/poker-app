@@ -48,8 +48,8 @@ class Room extends Model
      * @var array
      */
     protected $casts = [
-        'voting' => 'boolean',
         'voting_started_at' => 'datetime',
+        'votes' => 'array',
     ];
 
     /**

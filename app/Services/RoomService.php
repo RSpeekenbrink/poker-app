@@ -20,6 +20,8 @@ class RoomService implements RoomServiceContract
         '8',
         '13',
         '21',
+        '-',
+        '☕',
     ];
 
     /**
