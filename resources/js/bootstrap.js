@@ -22,7 +22,7 @@ window.Echo = new Echo({
   broadcaster: 'pusher',
   key: process.env.MIX_PUSHER_APP_KEY,
   cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-  wsHost: window.location.hostname,
+  wsHost: process.env.MIX_WEBSOCKET_HOSTNAME ?? window.location.hostname,
   wsPort: process.env.MIX_WEBSOCKET_PORT,
   forceTLS: false,
   disableStats: true,
