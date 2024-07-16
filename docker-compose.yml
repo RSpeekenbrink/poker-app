@@ -1,5 +1,5 @@
 services:
-    laravel.test:
+    app:
         build:
             context: ./vendor/laravel/sail/runtimes/8.3
             dockerfile: Dockerfile
@@ -21,7 +21,7 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - scrum-poker
         depends_on:
             - mariadb
     mariadb:
@@ -36,10 +36,10 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         volumes:
-            - 'sail-mariadb:/var/lib/mysql'
+            - 'scrum-poker-mariadb:/var/lib/mysql'
             - './vendor/laravel/sail/database/mariadb/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
-            - sail
+            - scrum-poker
         healthcheck:
             test:
                 - CMD
@@ -49,8 +49,8 @@ services:
             retries: 3
             timeout: 5s
 networks:
-    sail:
+    scrum-poker:
         driver: bridge
 volumes:
-    sail-mariadb:
+    scrum-poker-mariadb:
         driver: local
