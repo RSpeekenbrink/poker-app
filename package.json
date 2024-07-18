@@ -29,6 +29,8 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@dicebear/collection": "^9.0.1",
+        "@dicebear/core": "^9.0.1",
         "@heroicons/react": "^2.1.5",
         "@inertiajs/react": "^1.2.0",
         "@uidotdev/usehooks": "^2.4.1"

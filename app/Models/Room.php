@@ -26,7 +26,7 @@ class Room extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     public static function booted(): void
