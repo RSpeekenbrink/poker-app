@@ -78,7 +78,7 @@ export default function CreateRoomForm({ className = '' }: { className?: string 
                     <InputError message={errors.name} className="mt-2"/>
                 </div>
 
-                <div className="flex justify-end items-center gap-4">
+                <div>
                     <PrimaryButton className={'w-full'} disabled={processing}>Create</PrimaryButton>
 
                     <Transition
