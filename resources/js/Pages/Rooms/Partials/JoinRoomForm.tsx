@@ -17,6 +17,10 @@ export default function JoinRoomForm({ room, className = '' }: PageProps<{ class
     const joinRoom: FormEventHandler = (e) => {
         e.preventDefault();
 
+        if (!room) {
+            return;
+        }
+
         localStorage.setItem('name', data.name);
 
         post(route('room.join.request', room.slug), {

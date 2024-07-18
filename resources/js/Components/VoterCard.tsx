@@ -1,6 +1,6 @@
-import { ButtonHTMLAttributes } from 'react';
+import {VotingOption} from "@/types";
 
-export default function VoterCard({ className = '', value }: { className: string, value?: string}) {
+export default function VoterCard({ className = '', value }: { className?: string, value?: VotingOption}) {
     return (
         <div
             className={

@@ -3,11 +3,16 @@ import Layout from '@/Layouts/Layout';
 import {PageProps, User} from "@/types";
 import {useEffect, useState} from "react";
 import Participants from "@/Pages/Rooms/Partials/Participants";
+import VoterCard from "@/Components/VoterCard";
 
 export default function Show({ room, user }: PageProps) {
     const [participants, setParticipants] = useState<User[]>([]);
 
     useEffect(() => {
+        if (!room) {
+            return;
+        }
+
         window.Echo.join(`room.${room.slug}`)
             .here((users: User[]) => {
                 setParticipants(users);
@@ -38,6 +43,10 @@ export default function Show({ room, user }: PageProps) {
         };
     }, [room]);
 
+    if (!room) {
+        return;
+    }
+
     return (
         <Layout>
             <Head title={room.name}/>
@@ -47,6 +56,16 @@ export default function Show({ room, user }: PageProps) {
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
                         {room.name}
                     </h2>
+                </div>
+
+                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                    <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
+                        <div className="flex justify-center gap-4 flex-wrap">
+                            { window.VotingOptions.map((option) => {
+                                return (<VoterCard key={ option } className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" value={option} />)
+                            }) }
+                        </div>
+                    </div>
                 </div>
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
