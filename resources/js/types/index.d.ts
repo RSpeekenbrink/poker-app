@@ -1,5 +1,10 @@
 export type VotingOption = '☕' | '1' | '2' | '3' | '5' | '8' | '13' | '20' | '?';
 
+export type VotingEvent = {
+    user_id: string,
+    vote: VotingOption
+}
+
 export interface Room {
     slug: string;
     name: string;

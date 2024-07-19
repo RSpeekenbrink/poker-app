@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import Layout from '@/Layouts/Layout';
-import {PageProps, User} from "@/types";
+import {PageProps, User, VotingEvent, VotingOption} from "@/types";
 import {useEffect, useState} from "react";
 import Participants from "@/Pages/Rooms/Partials/Participants";
 import VoterCard from "@/Components/VoterCard";
@@ -13,11 +13,9 @@ export default function Show({ room, user }: PageProps) {
             return;
         }
 
-        window.Echo.join(`room.${room.slug}`)
+        const channel = window.Echo.join(`room.${room.slug}`)
             .here((users: User[]) => {
                 setParticipants(users);
-
-                console.log(users);
             })
             .joining((user: User) => {
                 setParticipants(state => [...state, user]);
@@ -38,6 +36,21 @@ export default function Show({ room, user }: PageProps) {
             .error((error: any) => {
                 console.error(error);
             });
+
+            channel.listen('.voted', (event: VotingEvent) => {
+                setParticipants(participants => {
+                    let updated = [...participants];
+
+                    const index = updated.findIndex((element: User) => element.id === event.user_id);
+
+                    if (index !== undefined) {
+                        updated[index].currentVote = event.vote;
+                    }
+
+                    return updated;
+                });
+            });
+
         return () => {
             window.Echo.disconnect();
         };
@@ -45,6 +58,16 @@ export default function Show({ room, user }: PageProps) {
 
     if (!room) {
         return;
+    }
+
+    function vote(vote: VotingOption) {
+        if (!room) {
+            return;
+        }
+
+        window.axios.post(route('room.vote', room.slug), {
+            vote
+        });
     }
 
     return (
@@ -61,8 +84,8 @@ export default function Show({ room, user }: PageProps) {
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
                         <div className="flex justify-center gap-4 flex-wrap">
-                            { window.VotingOptions.map((option) => {
-                                return (<VoterCard key={ option } className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" value={option} />)
+                            { window.VotingOptions.map((value: VotingOption) => {
+                                return <VoterCard onClick={() => vote(value)} key={ value } className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" value={value} />
                             }) }
                         </div>
                     </div>

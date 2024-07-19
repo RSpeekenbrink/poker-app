@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Vote;
+use App\Events\VotedEvent;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\JoinRoomRequest;
+use App\Http\Requests\VoteRequest;
 use App\Models\Room;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
@@ -28,7 +31,7 @@ class RoomController extends Controller
                 return Redirect::route('index');
             }
 
-           $request->session()->regenerate();
+            $request->session()->regenerate();
         }
 
         session(['ses_id' => session()->getId()]);
@@ -39,7 +42,9 @@ class RoomController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('Rooms/Index');
+        return Inertia::render('Rooms/Index', [
+            'error' => session('error'),
+        ]);
     }
 
     public function store(CreateRoomRequest $request): RedirectResponse
@@ -77,5 +82,12 @@ class RoomController extends Controller
     public function join(Room $room, JoinRoomRequest $request): RedirectResponse
     {
         return $this->authenticateAndRedirectToRoom($room, $request);
+    }
+
+    public function vote(Room $room, VoteRequest $request): \Illuminate\Http\Response
+    {
+        VotedEvent::dispatch($room, Auth::user()->id, Vote::from($request->vote));
+
+        return response()->noContent();
     }
 }
