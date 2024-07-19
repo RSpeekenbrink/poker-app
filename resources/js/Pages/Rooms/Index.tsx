@@ -1,8 +1,9 @@
 import { Head } from '@inertiajs/react';
 import Layout from '@/Layouts/Layout';
 import CreateRoomForm from "@/Pages/Rooms/Partials/CreateRoomForm";
+import {PageProps} from "@/types";
 
-export default function Index() {
+export default function Index({ error } : PageProps<{ error?: string }>) {
     return (
         <Layout>
             <Head title="Create Room"/>
@@ -24,6 +25,17 @@ export default function Index() {
                 </div>
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                    {
+                        error ? (
+                            <div
+                                className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                                role="alert"
+                            >
+                                { error }
+                            </div>
+                        )  : ''
+                    }
+                    
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
                         <div className="space-y-6">
                             <CreateRoomForm />

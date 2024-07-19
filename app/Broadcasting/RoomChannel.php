@@ -8,14 +8,6 @@ use App\Models\Room;
 class RoomChannel
 {
     /**
-     * Create a new channel instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Authenticate the user's access to the channel.
      */
     public function join(StubUser $user, string $roomId): array|bool

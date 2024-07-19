@@ -15,19 +15,17 @@ use Illuminate\Support\Facades\Session;
 /**
  * @property string $id
  */
-class StubUser extends Model implements
-    AuthenticatableContract,
-    AuthorizableContract
+class StubUser extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable, Notifiable;
 
     protected $keyType = 'string';
 
     protected $fillable = [
-        'id'
+        'id',
     ];
 
-    public function getName(string $roomId = null): string
+    public function getName(?string $roomId = null): string
     {
         $room = Request::route('room');
 
