@@ -1,27 +1,30 @@
-import { Head } from '@inertiajs/react';
+import {Head, router} from '@inertiajs/react';
 import Layout from '@/Layouts/Layout';
-import {PageProps, User, Votes, VotingEvent, VotingOption} from "@/types";
+import {PageProps, ResetEvent, Room, ShowEvent, User, Votes, VotingEvent, VotingOption} from "@/types";
 import {useEffect, useState} from "react";
 import Participants from "@/Pages/Rooms/Partials/Participants";
 import VoterCard from "@/Components/VoterCard";
+import DangerButton from "@/Components/DangerButton";
+import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Show({ room, user }: PageProps) {
+    if (!room) {
+        return;
+    }
+
     const [participants, setParticipants] = useState<User[]>([]);
     const [votes, setVotes] = useState<Votes>({});
+    const [showVotes, setShowVotes] = useState<boolean>(room.show);
 
-    const [currentVote, setCurrentVote] = useState<VotingOption>();
+    const [currentVote, setCurrentVote] = useState<VotingOption|null>();
 
     useEffect(() => {
-        if (!room) {
-            return;
-        }
-
         const channel = window.Echo.join(`room.${room.slug}`)
             .here((users: User[]) => {
-                setParticipants(users);
                 setVotes(room.votes);
+                setParticipants(users);
 
-                if (user && room.votes.hasOwnProperty(user.id)) {
+                if (user && room.votes && room.votes.hasOwnProperty(user.id)) {
                     setCurrentVote(room.votes[user.id]);
                 }
             })
@@ -42,21 +45,29 @@ export default function Show({ room, user }: PageProps) {
                 })
             })
             .error((error: any) => {
-                console.error(error);
+                console.error('Websocket Error!', error);
+
+                router.reload();
             });
 
             channel.listen('.voted', (event: VotingEvent) => {
                 setVotes(event.room_votes);
             });
 
+            channel.listen('.reset', (event: ResetEvent) => {
+                setVotes(event.room_votes);
+                setCurrentVote(null);
+                setShowVotes(false);
+            });
+
+            channel.listen('.show', (event: ShowEvent) => {
+                setShowVotes(event.show);
+            });
+
         return () => {
-            window.Echo.disconnect();
+            window.Echo.leave(`room.${room.slug}`);
         };
     }, [room]);
-
-    if (!room) {
-        return;
-    }
 
     function vote(vote: VotingOption) {
         if (!room) {
@@ -66,6 +77,26 @@ export default function Show({ room, user }: PageProps) {
         window.axios.post(route('room.vote', room.slug), {
             vote
         }).then(() => setCurrentVote(vote));
+    }
+
+    function toggleVotes() {
+        if (!room) {
+            return;
+        }
+
+        window.axios.post(route('room.showVotes', room.slug), {
+            show: !showVotes
+        });
+    }
+
+    function resetVotes() {
+        if (!room) {
+            return;
+        }
+
+        if (window.confirm("Do you really want to reset votes for everyone?")) {
+            window.axios.post(route('room.reset', room.slug));
+        }
     }
 
     return (
@@ -79,12 +110,29 @@ export default function Show({ room, user }: PageProps) {
                     </h2>
                 </div>
 
-                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md flex justify-between">
+                    <DangerButton onClick={() => router.visit(route('index'))}>
+                        Leave
+                    </DangerButton>
+
+                    <div className='gap-4'>
+                        <SecondaryButton onClick={() => resetVotes()}>
+                            Reset Votes
+                        </SecondaryButton>
+
+                        <SecondaryButton onClick={() => toggleVotes()}>
+                            { showVotes ? 'Hide votes' : 'Show votes' }
+                        </SecondaryButton>
+                    </div>
+                </div>
+
+                <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
                         <div className="flex justify-center gap-4 flex-wrap">
-                            { window.VotingOptions.map((value: VotingOption) => {
-                                return <VoterCard onClick={() => vote(value)} key={ value } className={value === currentVote ? 'bg-blue-600 dark:bg-blue-600' : 'hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer'} value={value} />
-                            }) }
+                            {window.VotingOptions.map((value: VotingOption) => {
+                                return <VoterCard onClick={() => vote(value)} key={value} active={value === currentVote}
+                                                  value={value} clickable/>
+                            })}
                         </div>
                     </div>
                 </div>
@@ -92,7 +140,7 @@ export default function Show({ room, user }: PageProps) {
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
                         <div className="space-y-6">
-                            <Participants participants={participants} votes={votes}/>
+                            <Participants participants={participants} votes={votes} showVote={showVotes}/>
                         </div>
                     </div>
                 </div>

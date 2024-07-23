@@ -10,10 +10,19 @@ export type VotingEvent = {
     room_votes: Votes;
 }
 
+export type ShowEvent = {
+    show: boolean;
+}
+
+export type ResetEvent = {
+    room_votes: Votes;
+}
+
 export interface Room {
     slug: string;
     name: string;
     votes: Votes;
+    show: boolean;
 }
 
 export interface User {

@@ -3,7 +3,7 @@ import {BackgroundType, createAvatar} from '@dicebear/core';
 import { funEmoji } from '@dicebear/collection';
 import VoterCard from "@/Components/VoterCard";
 
-export default function Participant({ participant, vote }: { participant: User; vote?: VotingOption }) {
+export default function Participant({ participant, vote, showVote = false }: { participant: User; vote?: VotingOption; showVote: boolean; }) {
     const GRADIENT_LINEAR: BackgroundType = 'gradientLinear';
 
     const avatar = createAvatar(funEmoji, {
@@ -20,7 +20,7 @@ export default function Participant({ participant, vote }: { participant: User; 
                         {participant.name}
                     </div>
                 </div>
-                <VoterCard className="absolute right-0" value={ vote } />
+                <VoterCard className="absolute right-0" value={ vote } show={showVote} />
             </div>
         </>
     );
