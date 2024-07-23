@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Vote;
+use App\Events\ResetEvent;
+use App\Events\ShowEvent;
 use App\Events\VotedEvent;
 use App\Http\Requests\CreateRoomRequest;
 use App\Http\Requests\JoinRoomRequest;
+use App\Http\Requests\ResetRequest;
+use App\Http\Requests\ShowRequest;
 use App\Http\Requests\VoteRequest;
 use App\Models\Room;
 use Illuminate\Foundation\Http\FormRequest;
@@ -64,7 +68,7 @@ class RoomController extends Controller
         }
 
         return Inertia::render('Rooms/Show', [
-            'room' => ['slug' => $room->slug, 'name' => $room->name, 'votes' => $room->votes],
+            'room' => ['slug' => $room->slug, 'name' => $room->name, 'votes' => $room->votes, 'show' => $room->show],
             'user' => ['id' => Auth::user()->id, 'name' => session($room->id.'-name')],
         ]);
     }
@@ -98,6 +102,32 @@ class RoomController extends Controller
             $room->update(['votes' => $votes]);
 
             VotedEvent::dispatch($room, $userId, Vote::from($request->vote));
+        });
+
+        return response()->noContent();
+    }
+
+    public function showVotes(Room $room, ShowRequest $request): \Illuminate\Http\Response
+    {
+        $lock = Cache::lock('voting.'.$room->id, 10);
+
+        $lock->get(function () use ($room, $request) {
+            $room->update(['show' => $request->show]);
+
+            ShowEvent::dispatch($room, $request->show);
+        });
+
+        return response()->noContent();
+    }
+
+    public function reset(Room $room, ResetRequest $request): \Illuminate\Http\Response
+    {
+        $lock = Cache::lock('voting.'.$room->id, 10);
+
+        $lock->get(function () use ($room, $request) {
+            $room->update(['votes' => null, 'show' => false]);
+
+            ResetEvent::dispatch($room);
         });
 
         return response()->noContent();

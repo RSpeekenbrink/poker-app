@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('name');
             $table->json('votes')->nullable();
+            $table->boolean('show')->default(false);
             $table->timestamps();
         });
     }
