@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
  * @property int $id
  * @property string $slug
  * @property string $name
+ * @property array<string, string> $votes
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *
@@ -27,6 +28,7 @@ class Room extends Model
 
     protected $fillable = [
         'name',
+        'votes',
     ];
 
     public static function booted(): void
@@ -34,5 +36,12 @@ class Room extends Model
         static::creating(function ($model) {
             $model->slug = Str::uuid();
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'votes' => 'array',
+        ];
     }
 }

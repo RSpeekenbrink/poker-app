@@ -51,6 +51,7 @@ class VotedEvent implements ShouldBroadcastNow
         return [
             'user_id' => $this->id,
             'vote' => $this->vote->value,
+            'room_votes' => $this->room->votes
         ];
     }
 }

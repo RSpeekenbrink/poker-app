@@ -11,6 +11,7 @@ use App\Models\Room;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -63,8 +64,8 @@ class RoomController extends Controller
         }
 
         return Inertia::render('Rooms/Show', [
-            'room' => ['slug' => $room->slug, 'name' => $room->name],
-            'user' => ['name' => session($room->id.'-name')],
+            'room' => ['slug' => $room->slug, 'name' => $room->name, 'votes' => $room->votes],
+            'user' => ['id' => Auth::user()->id, 'name' => session($room->id.'-name')],
         ]);
     }
 
@@ -86,7 +87,18 @@ class RoomController extends Controller
 
     public function vote(Room $room, VoteRequest $request): \Illuminate\Http\Response
     {
-        VotedEvent::dispatch($room, Auth::user()->id, Vote::from($request->vote));
+        $userId = Auth::user()->id;
+
+        $lock = Cache::lock('voting.'.$room->id, 10);
+
+        $lock->get(function () use ($room, $request, $userId) {
+            $votes = $room->votes;
+            $votes[$userId] = $request->vote;
+
+            $room->update(['votes' => $votes]);
+
+            VotedEvent::dispatch($room, $userId, Vote::from($request->vote));
+        });
 
         return response()->noContent();
     }
