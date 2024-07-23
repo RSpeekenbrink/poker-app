@@ -1,12 +1,15 @@
 import { Head } from '@inertiajs/react';
 import Layout from '@/Layouts/Layout';
-import {PageProps, User, VotingEvent, VotingOption} from "@/types";
+import {PageProps, User, Votes, VotingEvent, VotingOption} from "@/types";
 import {useEffect, useState} from "react";
 import Participants from "@/Pages/Rooms/Partials/Participants";
 import VoterCard from "@/Components/VoterCard";
 
 export default function Show({ room, user }: PageProps) {
     const [participants, setParticipants] = useState<User[]>([]);
+    const [votes, setVotes] = useState<Votes>({});
+
+    const [currentVote, setCurrentVote] = useState<VotingOption>();
 
     useEffect(() => {
         if (!room) {
@@ -16,6 +19,11 @@ export default function Show({ room, user }: PageProps) {
         const channel = window.Echo.join(`room.${room.slug}`)
             .here((users: User[]) => {
                 setParticipants(users);
+                setVotes(room.votes);
+
+                if (user && room.votes.hasOwnProperty(user.id)) {
+                    setCurrentVote(room.votes[user.id]);
+                }
             })
             .joining((user: User) => {
                 setParticipants(state => [...state, user]);
@@ -38,17 +46,7 @@ export default function Show({ room, user }: PageProps) {
             });
 
             channel.listen('.voted', (event: VotingEvent) => {
-                setParticipants(participants => {
-                    let updated = [...participants];
-
-                    const index = updated.findIndex((element: User) => element.id === event.user_id);
-
-                    if (index !== undefined) {
-                        updated[index].currentVote = event.vote;
-                    }
-
-                    return updated;
-                });
+                setVotes(event.room_votes);
             });
 
         return () => {
@@ -67,7 +65,7 @@ export default function Show({ room, user }: PageProps) {
 
         window.axios.post(route('room.vote', room.slug), {
             vote
-        });
+        }).then(() => setCurrentVote(vote));
     }
 
     return (
@@ -85,7 +83,7 @@ export default function Show({ room, user }: PageProps) {
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
                         <div className="flex justify-center gap-4 flex-wrap">
                             { window.VotingOptions.map((value: VotingOption) => {
-                                return <VoterCard onClick={() => vote(value)} key={ value } className="hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" value={value} />
+                                return <VoterCard onClick={() => vote(value)} key={ value } className={value === currentVote ? 'bg-blue-600 dark:bg-blue-600' : 'hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer'} value={value} />
                             }) }
                         </div>
                     </div>
@@ -94,7 +92,7 @@ export default function Show({ room, user }: PageProps) {
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:bg-gray-800">
                         <div className="space-y-6">
-                            <Participants participants={participants}/>
+                            <Participants participants={participants} votes={votes}/>
                         </div>
                     </div>
                 </div>
