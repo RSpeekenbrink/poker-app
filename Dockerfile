@@ -46,7 +46,6 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/start-container /usr/local/bin/start-container
 
 # Composer and artisan cache stuff
-USER www
 RUN composer install --no-dev --ansi --no-interaction && \
     php artisan config:cache && \
     php artisan route:cache && \
