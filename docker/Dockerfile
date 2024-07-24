@@ -38,16 +38,16 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy files
-COPY --chown=www:www composer.json composer.lock* artisan /var/www/
-COPY --chown=www:www bootstrap/ /var/www/bootstrap/
-COPY --chown=www:www config/ /var/www/config/
-COPY --chown=www:www public/ /var/www/public/
-COPY --chown=www:www lang/ /var/www/lang/
-COPY --chown=www:www resources/ /var/www/resources/
-COPY --chown=www:www routes/ /var/www/routes/
-COPY --chown=www:www storage/ /var/www/storage/
-COPY --chown=www:www database/ /var/www/database/
-COPY --chown=www:www app/ /var/www/app/
+COPY --chown=www:www ../composer.json composer.lock* artisan /var/www/
+COPY --chown=www:www ../bootstrap/ /var/www/bootstrap/
+COPY --chown=www:www ../config/ /var/www/config/
+COPY --chown=www:www ../public/ /var/www/public/
+COPY --chown=www:www ../lang/ /var/www/lang/
+COPY --chown=www:www ../resources/ /var/www/resources/
+COPY --chown=www:www ../routes/ /var/www/routes/
+COPY --chown=www:www ../storage/ /var/www/storage/
+COPY --chown=www:www ../database/ /var/www/database/
+COPY --chown=www:www ../app/ /var/www/app/
 
 COPY ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
