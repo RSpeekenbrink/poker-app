@@ -2,6 +2,8 @@ FROM php:8.3-fpm
 
 LABEL maintainer="RSpeekenbrink"
 
+COPY ../composer.lock ../composer.json /var/www/
+
 # Set working directory
 WORKDIR /var/www
 
