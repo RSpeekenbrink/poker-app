@@ -4,6 +4,8 @@ import {PageProps} from "@/types";
 import JoinRoomForm from "@/Pages/Rooms/Partials/JoinRoomForm";
 
 export default function Join({ room, user }: PageProps) {
+    if (!room) return;
+
     return (
         <Layout>
             <Head title="Join Room"/>
