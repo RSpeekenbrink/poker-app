@@ -2,7 +2,7 @@ FROM php:8.3-fpm
 
 LABEL maintainer="RSpeekenbrink"
 
-COPY ../composer.lock ../composer.json /var/www/
+COPY composer.lock composer.json /var/www/
 
 # Set working directory
 WORKDIR /var/www
@@ -38,12 +38,12 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy files
-COPY ../ /var/www
-COPY --chown=www:www ../ /var/www
+COPY . /var/www
+COPY --chown=www:www . /var/www
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-COPY start-container /usr/local/bin/start-container
+COPY docker/start-container /usr/local/bin/start-container
 
 # Composer and artisan cache stuff
 USER www
