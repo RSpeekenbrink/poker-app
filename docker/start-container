@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 
+exec php /var/www/artisan migrate:fresh --force
+
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
