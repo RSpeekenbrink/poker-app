@@ -46,12 +46,7 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY docker/start-container /usr/local/bin/start-container
 
 # Composer and artisan cache stuff
-RUN composer install --no-dev --ansi --no-interaction && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    composer dump-autoload --no-dev --no-interaction && \
-    composer clear-cache --no-interaction;
+RUN composer install --no-dev --no-interaction;
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
