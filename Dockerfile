@@ -44,6 +44,7 @@ COPY --chown=www:www . /var/www
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 COPY docker/start-container /usr/local/bin/start-container
+RUN chmod +x /usr/local/bin/start-container
 
 # Composer and artisan cache stuff
 RUN composer install --no-dev --no-interaction;
