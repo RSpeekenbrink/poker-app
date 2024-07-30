@@ -64,6 +64,12 @@ make migrate
 The database is automatically created based on the credentials in your .env file and can also be reached on your
 localhost on the configured `FORWARD_DB_PORT` (3306 by default).
 
+It's also required to run the reverb server locally for development.  To start the server execute;
+
+```bash
+make ws
+```
+
 ### Vite dev build
 
 To build the frontend and run a local dev build run;

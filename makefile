@@ -24,3 +24,6 @@ dev:
 
 pint:
 	./vendor/bin/pint
+
+ws:
+	./vendor/bin/sail artisan reverb:start
