@@ -11,7 +11,7 @@
     position: relative;
     transition: transform 0.6s;
     transform-style: preserve-3d;
-    @apply w-10 h-14 p-4 text-center bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white;
+    @apply w-10 h-14 p-4 text-center bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-white font-bold;
 }
 
 .voter-card .front, .voter-card .back {

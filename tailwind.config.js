@@ -15,7 +15,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Anaheim', ...defaultTheme.fontFamily.sans],
+                sans: ['Almarai', ...defaultTheme.fontFamily.serif],
             },
         },
     },

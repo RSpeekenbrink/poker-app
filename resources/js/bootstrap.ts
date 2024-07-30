@@ -14,19 +14,6 @@ window.axios.defaults.withCredentials = true;
 window.axios.defaults.withXSRFToken = true;
 
 /**
- * We'll add a helper function to quickly refresh the current theme.
- */
-window.refreshTheme = () => {
-    if (localStorage.getItem('color-theme') === '"dark"') {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark')
-    }
-}
-
-window.refreshTheme();
-
-/**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
  * allows your team to easily build robust real-time web applications.
@@ -80,3 +67,16 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states: an
         window.Echo.connector.pusher.connect();
     }
 });
+
+/**
+ * We'll add a helper function to quickly refresh the current theme.
+ */
+window.refreshTheme = () => {
+    if (localStorage.getItem('color-theme') === '"dark"') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark')
+    }
+}
+
+window.refreshTheme();

@@ -8,7 +8,7 @@ export default function VoterCard({ className = '', value, show = true, active =
             { ...props }
             className={`voter-card ` + className}
         >
-            <div className={'inner ' + ((active ? '!bg-cyan-100 dark:!bg-cyan-800 ' : (clickable ? 'hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ' : '')) + (show ? 'flip' : ''))}>
+            <div className={'inner ' + ((active ? 'bg-gradient-to-br from-sky-500 to-sky-200 text-white dark:from-cyan-600 dark:to-cyan-900 ' : (clickable ? 'hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer ' : '')) + (show ? 'flip' : ''))}>
                 <div className='front'>
                     { value ? <CubeIcon className="size-6" /> : <CubeTransparentIcon className="size-6" /> }
                 </div>

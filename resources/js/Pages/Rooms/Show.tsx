@@ -1,11 +1,13 @@
 import {Head, router} from '@inertiajs/react';
 import Layout from '@/Layouts/Layout';
-import {PageProps, ResetEvent, Room, ShowEvent, User, Votes, VotingEvent, VotingOption} from "@/types";
+import {PageProps, ResetEvent, ShowEvent, User, Votes, VotingEvent, VotingOption} from "@/types";
 import {useEffect, useState} from "react";
 import Participants from "@/Pages/Rooms/Partials/Participants";
 import VoterCard from "@/Components/VoterCard";
 import DangerButton from "@/Components/DangerButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import {LinkIcon} from "@heroicons/react/24/solid";
+import toast from "react-hot-toast";
 
 export default function Show({ room, user }: PageProps) {
     if (!room) {
@@ -99,11 +101,19 @@ export default function Show({ room, user }: PageProps) {
         }
     }
 
+    function copyRoomUrl() {
+        let url = route('room.show', room?.slug);
+
+        navigator.clipboard.writeText(url).then(r =>  window.toast('Room URL copied to clipboard!', {
+            icon: '🔗',
+        }));
+    }
+
     return (
         <Layout>
             <Head title={room.name}/>
 
-            <div className="min-h-full flex flex-col justify-center mx-2 py-2 sm:mx-0 sm:py-12 sm:px-6 lg:px-8">
+            <div className="min-h-full flex flex-col justify-center mx-2 py-2 sm:mx-0 sm:px-6 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-md">
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
                         {room.name}
@@ -115,13 +125,17 @@ export default function Show({ room, user }: PageProps) {
                         Leave
                     </DangerButton>
 
-                    <div className='gap-4'>
+                    <div className='flex justify-end'>
                         <SecondaryButton onClick={() => resetVotes()}>
                             Reset Votes
                         </SecondaryButton>
 
                         <SecondaryButton onClick={() => toggleVotes()}>
                             { showVotes ? 'Hide votes' : 'Show votes' }
+                        </SecondaryButton>
+
+                        <SecondaryButton onClick={() => copyRoomUrl()}>
+                            <LinkIcon className="size-4" />
                         </SecondaryButton>
                     </div>
                 </div>

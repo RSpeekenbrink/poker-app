@@ -21,8 +21,12 @@ export default function Layout({ children }: PropsWithChildren) {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            <Toaster />
-            <header className="pt-4 sm:p-6 flex justify-end">
+            <Toaster toastOptions={{style: {
+                    borderRadius: '10px',
+                    background: theme === 'dark' ? '#1e2937' : '#fff',
+                    color: theme === 'dark' ? '#fff' : '#000',
+                }}} />
+            <header className="pt-4 sm:pt-6 sm:px-6 flex justify-end">
                 <SecondaryButton onClick={toggleTheme}>
                     { theme === 'dark' ? <SunIcon className="size-4" /> : <MoonIcon className="size-4" /> }
                 </SecondaryButton>
