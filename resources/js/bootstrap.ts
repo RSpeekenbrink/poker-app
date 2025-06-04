@@ -1,5 +1,3 @@
-import 'bootstrap';
-
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -23,8 +21,6 @@ import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
 
-import toast from 'react-hot-toast';
-
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -37,33 +33,11 @@ window.Echo = new Echo({
     enabledTransports: ['ws', 'wss'],
 });
 
-window.toast = toast;
-
 window.Echo.connector.pusher.connection.bind('state_change', function(states: any) {
     console.info('Websocket Status: ', states)
 
-    if(states.current === 'connected') {
-        window.toast.dismiss();
-
-        if (states.previous === 'unavailable') {
-            window.toast.success('Reconnected!')
-        }
-    }
-
-    if(states.current === 'connecting') {
-        window.toast.dismiss();
-        window.toast.loading('Reconnecting...');
-    }
-
-    if(states.current === 'unavailable') {
-        window.toast.dismiss();
-        window.toast.error('Websocket Unavailable! Attempting Reconnect..', { duration: 99999 })
-    }
-
     if(states.current === 'disconnected') {
         console.error('Websocket Disconnected!');
-        window.toast.dismiss();
-        window.toast.error('Websocket Disconnected! Attempting Reconnect..', { duration: 99999 })
         window.Echo.connector.pusher.connect();
     }
 });
