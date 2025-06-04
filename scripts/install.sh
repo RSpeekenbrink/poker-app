@@ -10,7 +10,7 @@ fi
 docker run --rm \
     -v $(pwd):/opt \
     -w /opt \
-    laravelsail/php83-composer:latest \
+    laravelsail/php84-composer:latest \
     bash -c "composer install --ignore-platform-reqs && cp .env.example .env && php ./artisan key:generate"
 
 CYAN='\033[0;36m'
