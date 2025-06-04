@@ -7,6 +7,7 @@ import VoterCard from "@/Components/VoterCard";
 import DangerButton from "@/Components/DangerButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {LinkIcon} from "@heroicons/react/24/solid";
+import { toast } from "react-toastify";
 
 export default function Show({ room, user }: PageProps) {
     if (!room) {
@@ -103,7 +104,9 @@ export default function Show({ room, user }: PageProps) {
     function copyRoomUrl() {
         let url = route('room.show', room?.slug);
 
-        navigator.clipboard.writeText(url);
+        navigator.clipboard.writeText(url).then(r =>  window.toast.info('Room URL copied to clipboard!', {
+            icon: <>🔗</>,
+        }));
     }
 
     return (
