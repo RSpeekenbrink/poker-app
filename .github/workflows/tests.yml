@@ -13,36 +13,46 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          coverage: none
+
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
       - name: Cache Vendor
         id: cache-vendor
         uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
+
       - name: Cache Node Modules
         id: cache-node
         uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+
       - name: Cache VITE Build
         id: cache-vite
         uses: actions/cache@v4
         with:
           path: public/build
           key: ${{ runner.os }}-vite-${{ hashFiles('**/resources') }}
+
       - name: Install Dependencies
         if: steps.cache-vendor.outputs.cache-hit != 'true'
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
       - name: NPM Install
         if: steps.cache-node.outputs.cache-hit != 'true'
         run: npm ci
+
       - name: Build VITE
         if: steps.cache-vite.outputs.cache-hit != 'true'
         run: npm run build
