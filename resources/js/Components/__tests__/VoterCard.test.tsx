@@ -40,7 +40,7 @@ describe('VoterCard', () => {
         const { container } = render(<VoterCard active value="5" />);
 
         const inner = container.querySelector('.inner');
-        expect(inner?.className).toContain('bg-gradient-to-br');
+        expect(inner?.className).toContain('bg-linear-to-br');
     });
 
     it('applies clickable styling when clickable', () => {

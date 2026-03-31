@@ -1,5 +1,4 @@
 import { Head } from '@inertiajs/react';
-import Layout from '@/Layouts/Layout';
 import {PageProps} from "@/types";
 import JoinRoomForm from "@/Pages/Rooms/Partials/JoinRoomForm";
 
@@ -7,7 +6,7 @@ export default function Join({ room, user }: PageProps) {
     if (!room) return;
 
     return (
-        <Layout>
+        <>
             <Head title="Join Room"/>
 
             <div className="min-h-full flex flex-col justify-center mx-2 py-2 sm:mx-0 sm:py-12 sm:px-6 lg:px-8">
@@ -34,6 +33,6 @@ export default function Join({ room, user }: PageProps) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }

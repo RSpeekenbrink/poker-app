@@ -5,76 +5,84 @@
  */
 
 import axios from 'axios';
-window.axios = axios;
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.withCredentials = true;
-window.axios.defaults.withXSRFToken = true;
+if (typeof window !== 'undefined') {
+    window.axios = axios;
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
+    window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    window.axios.defaults.withCredentials = true;
+    window.axios.defaults.withXSRFToken = true;
+}
+
+    /**
+     * Echo exposes an expressive API for subscribing to channels and listening
+     * for events that are broadcast by Laravel. Echo and event broadcasting
+     * allows your team to easily build robust real-time web applications.
+     */
 
 import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
 
-import { toast } from 'react-toastify';
+import {toast} from 'react-toastify';
 
-window.Pusher = Pusher;
+if (typeof window !== 'undefined') {
+    window.Pusher = Pusher;
 
-window.Echo = new Echo({
-    broadcaster: 'reverb',
-    key: import.meta.env.VITE_REVERB_APP_KEY,
-    wsHost: import.meta.env.VITE_REVERB_HOST,
-    wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
-    wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
-    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
-    enabledTransports: ['ws', 'wss'],
-});
+    window.Echo = new Echo({
+        broadcaster: 'reverb',
+        key: import.meta.env.VITE_REVERB_APP_KEY,
+        wsHost: import.meta.env.VITE_REVERB_HOST,
+        wsPort: import.meta.env.VITE_REVERB_PORT ?? 80,
+        wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
+        forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+        enabledTransports: ['ws', 'wss'],
+    });
 
-window.toast = toast;
+    window.toast = toast;
 
-window.Echo.connector.pusher.connection.bind('state_change', function(states: { current: string; previous: string }) {
-    console.debug('Websocket Status: ', states)
+    window.Echo.connector.pusher.connection.bind('state_change', function (states: {
+        current: string;
+        previous: string
+    }) {
+        console.debug('Websocket Status: ', states)
 
-    if(states.current === 'connected') {
-        window.toast.dismiss();
+        if (states.current === 'connected') {
+            window.toast.dismiss();
 
-        if (states.previous === 'unavailable') {
-            window.toast.success('Reconnected!')
+            if (states.previous === 'unavailable') {
+                window.toast.success('Reconnected!')
+            }
+        }
+
+        if (states.current === 'connecting') {
+            window.toast.dismiss();
+            window.toast.loading('Reconnecting...');
+        }
+
+        if (states.current === 'unavailable') {
+            window.toast.dismiss();
+            window.toast.error('Websocket Unavailable! Attempting Reconnect..', {autoClose: false})
+        }
+
+        if (states.current === 'disconnected') {
+            console.error('Websocket Disconnected!');
+            window.toast.dismiss();
+            window.toast.error('Websocket Disconnected! Attempting Reconnect..', {autoClose: false})
+            window.Echo.connector.pusher.connect();
+        }
+    });
+
+    /**
+     * We'll add a helper function to quickly refresh the current theme.
+     */
+    window.refreshTheme = () => {
+        if (localStorage.getItem('color-theme') === '"dark"') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
         }
     }
 
-    if(states.current === 'connecting') {
-        window.toast.dismiss();
-        window.toast.loading('Reconnecting...');
-    }
-
-    if(states.current === 'unavailable') {
-        window.toast.dismiss();
-        window.toast.error('Websocket Unavailable! Attempting Reconnect..', { autoClose: false })
-    }
-
-    if(states.current === 'disconnected') {
-        console.error('Websocket Disconnected!');
-        window.toast.dismiss();
-        window.toast.error('Websocket Disconnected! Attempting Reconnect..', { autoClose: false })
-        window.Echo.connector.pusher.connect();
-    }
-});
-
-/**
- * We'll add a helper function to quickly refresh the current theme.
- */
-window.refreshTheme = () => {
-    if (localStorage.getItem('color-theme') === '"dark"') {
-        document.documentElement.classList.add('dark');
-    } else {
-        document.documentElement.classList.remove('dark')
-    }
+    window.refreshTheme();
 }
-
-window.refreshTheme();

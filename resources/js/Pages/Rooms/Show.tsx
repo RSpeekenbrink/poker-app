@@ -1,5 +1,4 @@
 import {Head, router} from '@inertiajs/react';
-import Layout from '@/Layouts/Layout';
 import {PageProps, ResetEvent, ShowEvent, User, Votes, VotingEvent, VotingOption} from "@/types";
 import {useEffect, useState} from "react";
 import Participants from "@/Pages/Rooms/Partials/Participants";
@@ -113,7 +112,7 @@ export default function Show({ room, user }: PageProps) {
     }
 
     return (
-        <Layout>
+        <>
             <Head title={room.name}/>
 
             <div className="min-h-full flex flex-col justify-center mx-2 py-2 sm:mx-0 sm:px-6 lg:px-8">
@@ -162,6 +161,6 @@ export default function Show({ room, user }: PageProps) {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 }
