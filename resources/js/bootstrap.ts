@@ -38,7 +38,7 @@ window.Echo = new Echo({
 window.toast = toast;
 
 window.Echo.connector.pusher.connection.bind('state_change', function(states: any) {
-    console.info('Websocket Status: ', states)
+    console.debug('Websocket Status: ', states)
 
     if(states.current === 'connected') {
         window.toast.dismiss();
