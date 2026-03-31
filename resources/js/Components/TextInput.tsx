@@ -1,4 +1,5 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef, InputHTMLAttributes } from 'react';
+import type { InputHTMLAttributes } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 export default forwardRef(function TextInput(
     { type = 'text', className = '', isFocused = false, ...props }: InputHTMLAttributes<HTMLInputElement> & { isFocused?: boolean },
@@ -14,7 +15,7 @@ export default forwardRef(function TextInput(
         if (isFocused) {
             localRef.current?.focus();
         }
-    }, []);
+    }, [isFocused]);
 
     return (
         <input

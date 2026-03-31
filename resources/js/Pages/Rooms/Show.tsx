@@ -1,11 +1,11 @@
+import {LinkIcon} from "@heroicons/react/24/solid";
 import {Head, router} from '@inertiajs/react';
-import {PageProps, ResetEvent, ShowEvent, User, Votes, VotingEvent, VotingOption} from "@/types";
 import {useEffect, useState} from "react";
-import Participants from "@/Pages/Rooms/Partials/Participants";
-import VoterCard from "@/Components/VoterCard";
 import DangerButton from "@/Components/DangerButton";
 import SecondaryButton from "@/Components/SecondaryButton";
-import {LinkIcon} from "@heroicons/react/24/solid";
+import VoterCard from "@/Components/VoterCard";
+import Participants from "@/Pages/Rooms/Partials/Participants";
+import type {PageProps, ResetEvent, ShowEvent, User, Votes, VotingEvent, VotingOption} from "@/types";
 
 export default function Show({ room, user }: PageProps) {
     const [participants, setParticipants] = useState<User[]>([]);
@@ -38,6 +38,7 @@ export default function Show({ room, user }: PageProps) {
 
                     if (index !== undefined) {
                         updated.splice(index, 1);
+
                         return updated;
                     }
 

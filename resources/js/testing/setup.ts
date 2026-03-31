@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
-import { VotingOption } from '@/types';
+import type { VotingOption } from '@/types';
 
 // Mock window globals used by the app
 window.VotingOptions = ['☕', '1', '2', '3', '5', '8', '13', '20', '?'] as VotingOption[];
@@ -51,16 +51,27 @@ Object.defineProperty(window, 'matchMedia', {
 const store: Record<string, string> = {};
 const localStorageMock = {
     getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-    removeItem: vi.fn((key: string) => { delete store[key]; }),
-    clear: vi.fn(() => { Object.keys(store).forEach(k => delete store[k]); }),
-    get length() { return Object.keys(store).length; },
+    setItem: vi.fn((key: string, value: string) => {
+ store[key] = value; 
+}),
+    removeItem: vi.fn((key: string) => {
+ delete store[key]; 
+}),
+    clear: vi.fn(() => {
+ Object.keys(store).forEach(k => delete store[k]); 
+}),
+    get length() {
+ return Object.keys(store).length; 
+},
     key: vi.fn((i: number) => Object.keys(store)[i] ?? null),
 };
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
 // Mock ziggy route function
 (globalThis as any).route = vi.fn((name: string, params?: any) => {
-    if (params) return `/${name}/${params}`;
+    if (params) {
+return `/${name}/${params}`;
+}
+
     return `/${name}`;
 });

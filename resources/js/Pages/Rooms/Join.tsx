@@ -1,9 +1,11 @@
 import { Head } from '@inertiajs/react';
-import {PageProps} from "@/types";
 import JoinRoomForm from "@/Pages/Rooms/Partials/JoinRoomForm";
+import type {PageProps} from "@/types";
 
 export default function Join({ room, user }: PageProps) {
-    if (!room) return;
+    if (!room) {
+return;
+}
 
     return (
         <>

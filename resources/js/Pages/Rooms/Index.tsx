@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import CreateRoomForm from "@/Pages/Rooms/Partials/CreateRoomForm";
-import {PageProps} from "@/types";
+import type {PageProps} from "@/types";
 
 export default function Index({ error } : PageProps<{ error?: string }>) {
     return (

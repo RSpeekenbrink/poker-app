@@ -1,6 +1,6 @@
-import {VotingOption} from "@/types";
-import {HTMLAttributes} from "react";
 import {CubeIcon, CubeTransparentIcon} from "@heroicons/react/24/outline";
+import type {HTMLAttributes} from "react";
+import type {VotingOption} from "@/types";
 
 export default function VoterCard({ className = '', value, show = true, active = false, clickable = false, ...props }: HTMLAttributes<HTMLDivElement> & { className?: string; value?: VotingOption; show?: boolean; active?: boolean; clickable?: boolean;}) {
     return (

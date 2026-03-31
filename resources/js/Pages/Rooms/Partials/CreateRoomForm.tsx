@@ -1,10 +1,11 @@
-import { useRef, FormEventHandler } from 'react';
+import { Transition } from '@headlessui/react';
+import { useForm } from '@inertiajs/react';
+import type { FormEventHandler } from 'react';
+import { useRef } from 'react';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { useForm } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
 
 export default function CreateRoomForm({ className = '' }: { className?: string }) {
     const roomNameInput = useRef<HTMLInputElement>(null);

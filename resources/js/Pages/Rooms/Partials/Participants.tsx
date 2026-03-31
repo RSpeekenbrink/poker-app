@@ -1,5 +1,5 @@
-import {User, Votes} from "@/types";
 import Participant from "@/Pages/Rooms/Partials/Participant";
+import type {User, Votes} from "@/types";
 
 export default function Participants({ participants, votes, showVote = false }: { participants: User[]; votes: Votes; showVote: boolean; }) {
     function getVote(userId: string) {

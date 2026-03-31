@@ -1,8 +1,8 @@
-import { PropsWithChildren } from 'react';
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/solid";
-import SecondaryButton from "@/Components/SecondaryButton";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import type { PropsWithChildren } from 'react';
 import { ToastContainer } from "react-toastify";
+import SecondaryButton from "@/Components/SecondaryButton";
 
 export default function Layout({ children }: PropsWithChildren) {
     const [theme, setTheme] = useLocalStorage(

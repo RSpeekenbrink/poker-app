@@ -1,7 +1,8 @@
-import {User, VotingOption} from "@/types";
-import {BackgroundType, createAvatar} from '@dicebear/core';
 import { bottts } from '@dicebear/collection';
+import type {BackgroundType} from '@dicebear/core';
+import { createAvatar} from '@dicebear/core';
 import VoterCard from "@/Components/VoterCard";
+import type {User, VotingOption} from "@/types";
 
 export default function Participant({ participant, vote, showVote = false }: { participant: User; vote?: VotingOption; showVote: boolean; }) {
     const GRADIENT_LINEAR: BackgroundType = 'gradientLinear';
