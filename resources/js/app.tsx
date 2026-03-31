@@ -1,23 +1,23 @@
 import './bootstrap';
 import '../css/app.css';
 
-import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import Layout from '@/Layouts/Layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 window.VotingOptions = ['☕', '1', '2', '3', '5', '8', '13', '20', '?'];
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, import.meta.glob('./Pages/**/*.tsx')),
-    setup({ el, App, props }) {
-        const root = createRoot(el);
-
-        root.render(<App {...props} />);
+    title: (title) => (title ? `${title} - ${appName}` : appName),
+    layout: () => {
+        return Layout;
+    },
+    strictMode: true,
+    withApp(app) {
+        return <>{app}</>;
     },
     progress: {
-        color: '#4B5563',
+        color: '#0382ff',
     },
 });

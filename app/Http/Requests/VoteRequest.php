@@ -12,9 +12,6 @@ use Illuminate\Validation\Rule;
  */
 class VoteRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         if (! $room = Request::route('room')) {
@@ -24,11 +21,6 @@ class VoteRequest extends FormRequest
         return session()->has($room->id.'-name');
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
