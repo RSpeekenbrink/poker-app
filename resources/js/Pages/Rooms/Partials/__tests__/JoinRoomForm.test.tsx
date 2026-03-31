@@ -22,7 +22,12 @@ vi.mock('@headlessui/react', () => ({
 }));
 
 describe('JoinRoomForm', () => {
-    const room = { slug: 'abc-123', name: 'Sprint Planning', votes: {}, show: false };
+    const room = {
+        slug: 'abc-123',
+        name: 'Sprint Planning',
+        votes: {},
+        show: false,
+    };
 
     it('renders name input', () => {
         render(<JoinRoomForm room={room} />);
@@ -33,13 +38,17 @@ describe('JoinRoomForm', () => {
     it('renders the join button', () => {
         render(<JoinRoomForm room={room} />);
 
-        expect(screen.getByRole('button', { name: 'Join' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Join' }),
+        ).toBeInTheDocument();
     });
 
     it('renders the description text', () => {
         render(<JoinRoomForm room={room} />);
 
-        expect(screen.getByText(/Join a room and start voting/)).toBeInTheDocument();
+        expect(
+            screen.getByText(/Join a room and start voting/),
+        ).toBeInTheDocument();
     });
 
     it('submits the form on button click', async () => {

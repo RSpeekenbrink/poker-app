@@ -13,7 +13,10 @@ describe('Checkbox', () => {
     it('has type="checkbox"', () => {
         render(<Checkbox />);
 
-        expect(screen.getByRole('checkbox')).toHaveAttribute('type', 'checkbox');
+        expect(screen.getByRole('checkbox')).toHaveAttribute(
+            'type',
+            'checkbox',
+        );
     });
 
     it('can be toggled', async () => {

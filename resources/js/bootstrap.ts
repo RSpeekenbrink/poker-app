@@ -14,17 +14,17 @@ if (typeof window !== 'undefined') {
     window.axios.defaults.withXSRFToken = true;
 }
 
-    /**
-     * Echo exposes an expressive API for subscribing to channels and listening
-     * for events that are broadcast by Laravel. Echo and event broadcasting
-     * allows your team to easily build robust real-time web applications.
-     */
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
 
 import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
 
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
 if (typeof window !== 'undefined') {
     window.Pusher = Pusher;
@@ -41,37 +41,43 @@ if (typeof window !== 'undefined') {
 
     window.toast = toast;
 
-    window.Echo.connector.pusher.connection.bind('state_change', function (states: {
-        current: string;
-        previous: string
-    }) {
-        console.debug('Websocket Status: ', states)
+    window.Echo.connector.pusher.connection.bind(
+        'state_change',
+        function (states: { current: string; previous: string }) {
+            console.debug('Websocket Status: ', states);
 
-        if (states.current === 'connected') {
-            window.toast.dismiss();
+            if (states.current === 'connected') {
+                window.toast.dismiss();
 
-            if (states.previous === 'unavailable') {
-                window.toast.success('Reconnected!')
+                if (states.previous === 'unavailable') {
+                    window.toast.success('Reconnected!');
+                }
             }
-        }
 
-        if (states.current === 'connecting') {
-            window.toast.dismiss();
-            window.toast.loading('Reconnecting...');
-        }
+            if (states.current === 'connecting') {
+                window.toast.dismiss();
+                window.toast.loading('Reconnecting...');
+            }
 
-        if (states.current === 'unavailable') {
-            window.toast.dismiss();
-            window.toast.error('Websocket Unavailable! Attempting Reconnect..', {autoClose: false})
-        }
+            if (states.current === 'unavailable') {
+                window.toast.dismiss();
+                window.toast.error(
+                    'Websocket Unavailable! Attempting Reconnect..',
+                    { autoClose: false },
+                );
+            }
 
-        if (states.current === 'disconnected') {
-            console.error('Websocket Disconnected!');
-            window.toast.dismiss();
-            window.toast.error('Websocket Disconnected! Attempting Reconnect..', {autoClose: false})
-            window.Echo.connector.pusher.connect();
-        }
-    });
+            if (states.current === 'disconnected') {
+                console.error('Websocket Disconnected!');
+                window.toast.dismiss();
+                window.toast.error(
+                    'Websocket Disconnected! Attempting Reconnect..',
+                    { autoClose: false },
+                );
+                window.Echo.connector.pusher.connect();
+            }
+        },
+    );
 
     /**
      * We'll add a helper function to quickly refresh the current theme.
@@ -80,9 +86,9 @@ if (typeof window !== 'undefined') {
         if (localStorage.getItem('color-theme') === '"dark"') {
             document.documentElement.classList.add('dark');
         } else {
-            document.documentElement.classList.remove('dark')
+            document.documentElement.classList.remove('dark');
         }
-    }
+    };
 
     window.refreshTheme();
 }

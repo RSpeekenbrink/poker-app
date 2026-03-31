@@ -7,7 +7,9 @@ describe('SecondaryButton', () => {
     it('renders children', () => {
         render(<SecondaryButton>Cancel</SecondaryButton>);
 
-        expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Cancel' }),
+        ).toBeInTheDocument();
     });
 
     it('has type="button" by default', () => {

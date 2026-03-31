@@ -20,7 +20,12 @@ vi.mock('@headlessui/react', () => ({
 }));
 
 describe('Join', () => {
-    const room = { slug: 'abc-123', name: 'Sprint Planning', votes: {}, show: false };
+    const room = {
+        slug: 'abc-123',
+        name: 'Sprint Planning',
+        votes: {},
+        show: false,
+    };
 
     it('renders the room name in the heading', () => {
         render(<Join room={room} />);
@@ -37,7 +42,9 @@ describe('Join', () => {
     it('renders the join button', () => {
         render(<Join room={room} />);
 
-        expect(screen.getByRole('button', { name: 'Join' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Join' }),
+        ).toBeInTheDocument();
     });
 
     it('renders nothing when room is not provided', () => {

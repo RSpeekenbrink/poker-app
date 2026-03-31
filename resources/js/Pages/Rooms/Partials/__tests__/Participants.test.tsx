@@ -17,7 +17,13 @@ describe('Participants', () => {
     ];
 
     it('renders all participants', () => {
-        render(<Participants participants={participants} votes={{}} showVote={false} />);
+        render(
+            <Participants
+                participants={participants}
+                votes={{}}
+                showVote={false}
+            />,
+        );
 
         expect(screen.getByText('Alice')).toBeInTheDocument();
         expect(screen.getByText('Bob')).toBeInTheDocument();
@@ -26,14 +32,22 @@ describe('Participants', () => {
     it('passes correct votes to each participant', () => {
         const votes = { 'user-1': '5' as const, 'user-2': '8' as const };
 
-        render(<Participants participants={participants} votes={votes} showVote={true} />);
+        render(
+            <Participants
+                participants={participants}
+                votes={votes}
+                showVote={true}
+            />,
+        );
 
         expect(screen.getByText('5')).toBeInTheDocument();
         expect(screen.getByText('8')).toBeInTheDocument();
     });
 
     it('renders empty when no participants', () => {
-        const { container } = render(<Participants participants={[]} votes={{}} showVote={false} />);
+        const { container } = render(
+            <Participants participants={[]} votes={{}} showVote={false} />,
+        );
 
         expect(container.innerHTML).toBe('');
     });

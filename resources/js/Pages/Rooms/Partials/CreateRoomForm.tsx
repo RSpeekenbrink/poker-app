@@ -7,11 +7,23 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 
-export default function CreateRoomForm({ className = '' }: { className?: string }) {
+export default function CreateRoomForm({
+    className = '',
+}: {
+    className?: string;
+}) {
     const roomNameInput = useRef<HTMLInputElement>(null);
     const nameInput = useRef<HTMLInputElement>(null);
 
-    const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
+    const {
+        data,
+        setData,
+        errors,
+        post,
+        reset,
+        processing,
+        recentlySuccessful,
+    } = useForm({
         room_name: '',
         name: localStorage.getItem('name') ?? '',
     });
@@ -42,13 +54,14 @@ export default function CreateRoomForm({ className = '' }: { className?: string 
         <section className={className}>
             <header>
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Create a new room, share the URL with the rest of your team to start voting for story points!
+                    Create a new room, share the URL with the rest of your team
+                    to start voting for story points!
                 </p>
             </header>
 
             <form onSubmit={createRoom} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="room_name" value="Room Name"/>
+                    <InputLabel htmlFor="room_name" value="Room Name" />
 
                     <TextInput
                         id="room_name"
@@ -60,11 +73,11 @@ export default function CreateRoomForm({ className = '' }: { className?: string 
                         autoComplete="room-name"
                     />
 
-                    <InputError message={errors.room_name} className="mt-2"/>
+                    <InputError message={errors.room_name} className="mt-2" />
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="name" value="Your Name"/>
+                    <InputLabel htmlFor="name" value="Your Name" />
 
                     <TextInput
                         id="name"
@@ -76,11 +89,13 @@ export default function CreateRoomForm({ className = '' }: { className?: string 
                         autoComplete="name"
                     />
 
-                    <InputError message={errors.name} className="mt-2"/>
+                    <InputError message={errors.name} className="mt-2" />
                 </div>
 
                 <div>
-                    <PrimaryButton className={'w-full'} disabled={processing}>Create</PrimaryButton>
+                    <PrimaryButton className={'w-full'} disabled={processing}>
+                        Create
+                    </PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -89,7 +104,9 @@ export default function CreateRoomForm({ className = '' }: { className?: string 
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Created.</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                            Created.
+                        </p>
                     </Transition>
                 </div>
             </form>

@@ -22,11 +22,16 @@ describe('Participant', () => {
     it('renders avatar image', () => {
         render(<Participant participant={participant} showVote={false} />);
 
-        expect(screen.getByRole('presentation')).toHaveAttribute('src', expect.stringContaining('data:image'));
+        expect(screen.getByRole('presentation')).toHaveAttribute(
+            'src',
+            expect.stringContaining('data:image'),
+        );
     });
 
     it('renders voter card with vote value', () => {
-        render(<Participant participant={participant} vote="5" showVote={true} />);
+        render(
+            <Participant participant={participant} vote="5" showVote={true} />,
+        );
 
         expect(screen.getByText('5')).toBeInTheDocument();
     });

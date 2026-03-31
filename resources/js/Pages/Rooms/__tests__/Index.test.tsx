@@ -34,9 +34,13 @@ describe('Index', () => {
     });
 
     it('displays error message when provided', () => {
-        render(<Index error="The room you tried to join doesn't exist. Please create a new one." />);
+        render(
+            <Index error="The room you tried to join doesn't exist. Please create a new one." />,
+        );
 
-        expect(screen.getByRole('alert')).toHaveTextContent("The room you tried to join doesn't exist");
+        expect(screen.getByRole('alert')).toHaveTextContent(
+            "The room you tried to join doesn't exist",
+        );
     });
 
     it('does not display error alert when no error', () => {

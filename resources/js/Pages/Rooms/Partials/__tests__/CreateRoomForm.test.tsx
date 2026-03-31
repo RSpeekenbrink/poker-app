@@ -32,13 +32,17 @@ describe('CreateRoomForm', () => {
     it('renders the create button', () => {
         render(<CreateRoomForm />);
 
-        expect(screen.getByRole('button', { name: 'Create' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Create' }),
+        ).toBeInTheDocument();
     });
 
     it('renders the description text', () => {
         render(<CreateRoomForm />);
 
-        expect(screen.getByText(/Create a new room, share the URL/)).toBeInTheDocument();
+        expect(
+            screen.getByText(/Create a new room, share the URL/),
+        ).toBeInTheDocument();
     });
 
     it('submits the form on button click', async () => {

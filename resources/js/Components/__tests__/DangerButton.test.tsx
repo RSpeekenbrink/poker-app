@@ -7,7 +7,9 @@ describe('DangerButton', () => {
     it('renders children', () => {
         render(<DangerButton>Delete</DangerButton>);
 
-        expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Delete' }),
+        ).toBeInTheDocument();
     });
 
     it('calls onClick handler when clicked', async () => {

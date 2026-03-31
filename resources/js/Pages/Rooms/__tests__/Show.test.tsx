@@ -19,7 +19,12 @@ vi.mock('@dicebear/collection', () => ({
 }));
 
 describe('Show', () => {
-    const room = { slug: 'abc-123', name: 'Sprint Planning', votes: {}, show: false };
+    const room = {
+        slug: 'abc-123',
+        name: 'Sprint Planning',
+        votes: {},
+        show: false,
+    };
     const user = { id: 'user-1', name: 'Alice' };
 
     beforeEach(() => {
@@ -33,7 +38,9 @@ describe('Show', () => {
             error: vi.fn().mockReturnThis(),
             listen: vi.fn().mockReturnThis(),
         };
-        (window.Echo.join as ReturnType<typeof vi.fn>).mockReturnValue(channelMock);
+        (window.Echo.join as ReturnType<typeof vi.fn>).mockReturnValue(
+            channelMock,
+        );
     });
 
     it('renders the room name', () => {
@@ -46,7 +53,7 @@ describe('Show', () => {
         render(<Show room={room} user={user} />);
 
         // Should have voter cards for each voting option
-        window.VotingOptions.forEach(option => {
+        window.VotingOptions.forEach((option) => {
             expect(screen.getByText(option)).toBeInTheDocument();
         });
     });
@@ -54,25 +61,33 @@ describe('Show', () => {
     it('renders the Leave button', () => {
         render(<Show room={room} user={user} />);
 
-        expect(screen.getByRole('button', { name: 'Leave' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Leave' }),
+        ).toBeInTheDocument();
     });
 
     it('renders the Reset Votes button', () => {
         render(<Show room={room} user={user} />);
 
-        expect(screen.getByRole('button', { name: 'Reset Votes' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Reset Votes' }),
+        ).toBeInTheDocument();
     });
 
     it('renders Show votes button when votes are hidden', () => {
         render(<Show room={room} user={user} />);
 
-        expect(screen.getByRole('button', { name: 'Show votes' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Show votes' }),
+        ).toBeInTheDocument();
     });
 
     it('renders Hide votes button when votes are shown', () => {
         render(<Show room={{ ...room, show: true }} user={user} />);
 
-        expect(screen.getByRole('button', { name: 'Hide votes' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Hide votes' }),
+        ).toBeInTheDocument();
     });
 
     it('joins the Echo presence channel on mount', () => {
@@ -89,7 +104,9 @@ describe('Show', () => {
 
     it('posts vote when a voting card is clicked', async () => {
         const user_ = userEvent.setup();
-        (window.axios.post as ReturnType<typeof vi.fn>).mockResolvedValue({ data: {} });
+        (window.axios.post as ReturnType<typeof vi.fn>).mockResolvedValue({
+            data: {},
+        });
 
         render(<Show room={room} user={user} />);
 
@@ -103,7 +120,9 @@ describe('Show', () => {
 
     it('toggles votes when Show votes button is clicked', async () => {
         const user_ = userEvent.setup();
-        (window.axios.post as ReturnType<typeof vi.fn>).mockResolvedValue({ data: {} });
+        (window.axios.post as ReturnType<typeof vi.fn>).mockResolvedValue({
+            data: {},
+        });
 
         render(<Show room={room} user={user} />);
 
@@ -118,7 +137,9 @@ describe('Show', () => {
     it('resets votes after confirmation', async () => {
         const user_ = userEvent.setup();
         vi.spyOn(window, 'confirm').mockReturnValue(true);
-        (window.axios.post as ReturnType<typeof vi.fn>).mockResolvedValue({ data: {} });
+        (window.axios.post as ReturnType<typeof vi.fn>).mockResolvedValue({
+            data: {},
+        });
 
         render(<Show room={room} user={user} />);
 

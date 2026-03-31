@@ -6,12 +6,23 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import type {PageProps} from "@/types";
+import type { PageProps } from '@/types';
 
-export default function JoinRoomForm({ room, className = '' }: PageProps<{ className?: string }>) {
+export default function JoinRoomForm({
+    room,
+    className = '',
+}: PageProps<{ className?: string }>) {
     const nameInput = useRef<HTMLInputElement>(null);
 
-    const { data, setData, errors, post, reset, processing, recentlySuccessful } = useForm({
+    const {
+        data,
+        setData,
+        errors,
+        post,
+        reset,
+        processing,
+        recentlySuccessful,
+    } = useForm({
         name: localStorage.getItem('name') ?? '',
     });
 
@@ -46,7 +57,7 @@ export default function JoinRoomForm({ room, className = '' }: PageProps<{ class
 
             <form onSubmit={joinRoom} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Your Name"/>
+                    <InputLabel htmlFor="name" value="Your Name" />
 
                     <TextInput
                         id="name"
@@ -58,11 +69,13 @@ export default function JoinRoomForm({ room, className = '' }: PageProps<{ class
                         autoComplete="name"
                     />
 
-                    <InputError message={errors.name} className="mt-2"/>
+                    <InputError message={errors.name} className="mt-2" />
                 </div>
 
                 <div>
-                    <PrimaryButton className={'w-full'} disabled={processing}>Join</PrimaryButton>
+                    <PrimaryButton className={'w-full'} disabled={processing}>
+                        Join
+                    </PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -71,7 +84,9 @@ export default function JoinRoomForm({ room, className = '' }: PageProps<{ class
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Joined.</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                            Joined.
+                        </p>
                     </Transition>
                 </div>
             </form>

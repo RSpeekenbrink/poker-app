@@ -7,7 +7,9 @@ describe('PrimaryButton', () => {
     it('renders children', () => {
         render(<PrimaryButton>Create</PrimaryButton>);
 
-        expect(screen.getByRole('button', { name: 'Create' })).toBeInTheDocument();
+        expect(
+            screen.getByRole('button', { name: 'Create' }),
+        ).toBeInTheDocument();
     });
 
     it('calls onClick handler when clicked', async () => {
