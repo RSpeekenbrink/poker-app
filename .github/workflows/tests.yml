@@ -75,6 +75,9 @@ jobs:
           name: vendor
           path: vendor
 
+      - name: Generate app key
+        run: php artisan key:generate
+
       - name: Run PHP tests
         run: php artisan test
         env:
@@ -102,7 +105,7 @@ jobs:
           path: vendor
 
       - name: Run Pint
-        run: ./vendor/bin/pint --test
+        run: php vendor/bin/pint --test
 
   js-tests:
     name: JS Tests
@@ -111,6 +114,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
 
       - name: Download node_modules
         uses: actions/download-artifact@v4
@@ -128,6 +136,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
 
       - name: Download node_modules
         uses: actions/download-artifact@v4
