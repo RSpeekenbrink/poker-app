@@ -7,9 +7,6 @@ use App\Models\Room;
 
 class RoomChannel
 {
-    /**
-     * Authenticate the user's access to the channel.
-     */
     public function join(StubUser $user, string $roomId): array|bool
     {
         $room = Room::query()->where('slug', $roomId)->first();

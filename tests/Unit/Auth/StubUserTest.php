@@ -22,7 +22,7 @@ class StubUserTest extends TestCase
     }
 
     #[Test]
-    public function getName_returns_empty_string_when_no_room_in_route_and_no_room_id(): void
+    public function get_name_returns_empty_string_when_no_room_in_route_and_no_room_id(): void
     {
         $user = new StubUser(['id' => 'test-id']);
 
@@ -30,7 +30,7 @@ class StubUserTest extends TestCase
     }
 
     #[Test]
-    public function getName_returns_empty_string_when_room_id_not_found(): void
+    public function get_name_returns_empty_string_when_room_id_not_found(): void
     {
         $user = new StubUser(['id' => 'test-id']);
 
@@ -38,7 +38,7 @@ class StubUserTest extends TestCase
     }
 
     #[Test]
-    public function getName_returns_name_from_session_with_room_id(): void
+    public function get_name_returns_name_from_session_with_room_id(): void
     {
         $room = Room::factory()->create();
         Session::put($room->id.'-name', 'John');
@@ -49,7 +49,7 @@ class StubUserTest extends TestCase
     }
 
     #[Test]
-    public function getName_returns_empty_string_when_no_session_name(): void
+    public function get_name_returns_empty_string_when_no_session_name(): void
     {
         $room = Room::factory()->create();
 

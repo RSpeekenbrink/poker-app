@@ -124,7 +124,7 @@ class RoomController extends Controller
     {
         $lock = Cache::lock('voting.'.$room->id, 10);
 
-        $lock->get(function () use ($room, $request) {
+        $lock->get(function () use ($room) {
             $room->update(['votes' => null, 'show' => false]);
 
             ResetEvent::dispatch($room);

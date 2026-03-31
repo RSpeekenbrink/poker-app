@@ -21,7 +21,7 @@ class ShowVotesTest extends TestCase
     }
 
     #[Test]
-    public function showVotes_updates_room(): void
+    public function show_votes_updates_room(): void
     {
         Event::fake([ShowEvent::class]);
         $room = Room::factory()->create();
@@ -37,7 +37,7 @@ class ShowVotesTest extends TestCase
     }
 
     #[Test]
-    public function showVotes_dispatches_show_event(): void
+    public function show_votes_dispatches_show_event(): void
     {
         Event::fake([ShowEvent::class]);
         $room = Room::factory()->create();
@@ -51,7 +51,7 @@ class ShowVotesTest extends TestCase
     }
 
     #[Test]
-    public function showVotes_can_hide_votes(): void
+    public function show_votes_can_hide_votes(): void
     {
         Event::fake([ShowEvent::class]);
         $room = Room::factory()->create();
@@ -67,7 +67,7 @@ class ShowVotesTest extends TestCase
     }
 
     #[Test]
-    public function showVotes_requires_show_field(): void
+    public function show_votes_requires_show_field(): void
     {
         $room = Room::factory()->create();
         $this->joinRoom($room);
@@ -78,7 +78,7 @@ class ShowVotesTest extends TestCase
     }
 
     #[Test]
-    public function showVotes_requires_boolean(): void
+    public function show_votes_requires_boolean(): void
     {
         $room = Room::factory()->create();
         $this->joinRoom($room);
@@ -91,7 +91,7 @@ class ShowVotesTest extends TestCase
     }
 
     #[Test]
-    public function showVotes_forbidden_without_session_name(): void
+    public function show_votes_forbidden_without_session_name(): void
     {
         $room = Room::factory()->create();
 

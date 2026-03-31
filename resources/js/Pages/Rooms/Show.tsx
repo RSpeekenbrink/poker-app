@@ -7,36 +7,35 @@ import VoterCard from "@/Components/VoterCard";
 import DangerButton from "@/Components/DangerButton";
 import SecondaryButton from "@/Components/SecondaryButton";
 import {LinkIcon} from "@heroicons/react/24/solid";
-import { toast } from "react-toastify";
 
 export default function Show({ room, user }: PageProps) {
-    if (!room) {
-        return;
-    }
-
     const [participants, setParticipants] = useState<User[]>([]);
     const [votes, setVotes] = useState<Votes>({});
-    const [showVotes, setShowVotes] = useState<boolean>(room.show);
+    const [showVotes, setShowVotes] = useState<boolean>(room?.show ?? false);
 
     const [currentVote, setCurrentVote] = useState<VotingOption|null>();
 
     useEffect(() => {
+        if (!room) {
+            return;
+        }
+
         const channel = window.Echo.join(`room.${room.slug}`)
             .here((users: User[]) => {
                 setVotes(room.votes);
                 setParticipants(users);
 
-                if (user && room.votes && room.votes.hasOwnProperty(user.id)) {
+                if (user && room.votes && Object.prototype.hasOwnProperty.call(room.votes, user.id)) {
                     setCurrentVote(room.votes[user.id]);
                 }
             })
-            .joining((user: User) => {
-                setParticipants(state => [...state, user]);
+            .joining((joiningUser: User) => {
+                setParticipants(state => [...state, joiningUser]);
             })
-            .leaving((user: User) => {
+            .leaving((leavingUser: User) => {
                 setParticipants(state => {
-                    let updated = [...state];
-                    const index = updated.indexOf(user);
+                    const updated = [...state];
+                    const index = updated.indexOf(leavingUser);
 
                     if (index !== undefined) {
                         updated.splice(index, 1);
@@ -46,7 +45,7 @@ export default function Show({ room, user }: PageProps) {
                     return state;
                 })
             })
-            .error((error: any) => {
+            .error((error: unknown) => {
                 console.error('Websocket Error!', error);
 
                 router.reload();
@@ -69,7 +68,7 @@ export default function Show({ room, user }: PageProps) {
         return () => {
             window.Echo.leave(`room.${room.slug}`);
         };
-    }, [room]);
+    }, [room, user]);
 
     function vote(vote: VotingOption) {
         if (!room) {
@@ -102,11 +101,15 @@ export default function Show({ room, user }: PageProps) {
     }
 
     function copyRoomUrl() {
-        let url = route('room.show', room?.slug);
+        const url = route('room.show', room?.slug);
 
-        navigator.clipboard.writeText(url).then(r =>  window.toast.info('Room URL copied to clipboard!', {
+        navigator.clipboard.writeText(url).then(() =>  window.toast.info('Room URL copied to clipboard!', {
             icon: <>🔗</>,
         }));
+    }
+
+    if (!room) {
+        return;
     }
 
     return (

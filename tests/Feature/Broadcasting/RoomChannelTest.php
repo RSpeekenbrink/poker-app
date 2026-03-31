@@ -21,7 +21,7 @@ class RoomChannelTest extends TestCase
 
         session([$room->id.'-name' => 'Alice']);
 
-        $channel = new RoomChannel();
+        $channel = new RoomChannel;
         $result = $channel->join($user, $room->slug);
 
         $this->assertIsArray($result);
@@ -35,7 +35,7 @@ class RoomChannelTest extends TestCase
         $room = Room::factory()->create();
         $user = new StubUser(['id' => 'user-1']);
 
-        $channel = new RoomChannel();
+        $channel = new RoomChannel;
         $result = $channel->join($user, $room->slug);
 
         $this->assertFalse($result);
@@ -46,7 +46,7 @@ class RoomChannelTest extends TestCase
     {
         $user = new StubUser(['id' => 'user-1']);
 
-        $channel = new RoomChannel();
+        $channel = new RoomChannel;
         $result = $channel->join($user, 'nonexistent-slug');
 
         $this->assertFalse($result);

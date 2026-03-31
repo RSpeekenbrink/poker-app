@@ -37,7 +37,7 @@ window.Echo = new Echo({
 
 window.toast = toast;
 
-window.Echo.connector.pusher.connection.bind('state_change', function(states: any) {
+window.Echo.connector.pusher.connection.bind('state_change', function(states: { current: string; previous: string }) {
     console.debug('Websocket Status: ', states)
 
     if(states.current === 'connected') {

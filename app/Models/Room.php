@@ -4,22 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
- * Room Model.
- *
- * Database Attributes;
- *
  * @property int $id
  * @property string $slug
  * @property string $name
- * @property boolean $show
+ * @property bool $show
  * @property array<string, string> $votes
- * @property \Illuminate\Support\Carbon $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- *
- * Methods:
+ * @property Carbon $created_at
+ * @property Carbon|null $updated_at
  *
  * @method static \Database\Factories\RoomFactory factory(...$parameters)
  */

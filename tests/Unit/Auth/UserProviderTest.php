@@ -14,11 +14,11 @@ class UserProviderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->provider = new UserProvider();
+        $this->provider = new UserProvider;
     }
 
     #[Test]
-    public function retrieveById_returns_stub_user(): void
+    public function retrieve_by_id_returns_stub_user(): void
     {
         $user = $this->provider->retrieveById('test-id');
 
@@ -27,7 +27,7 @@ class UserProviderTest extends TestCase
     }
 
     #[Test]
-    public function retrieveByCredentials_returns_stub_user(): void
+    public function retrieve_by_credentials_returns_stub_user(): void
     {
         $user = $this->provider->retrieveByCredentials(['id' => 'cred-id']);
 
@@ -36,7 +36,7 @@ class UserProviderTest extends TestCase
     }
 
     #[Test]
-    public function retrieveByCredentials_returns_null_without_id(): void
+    public function retrieve_by_credentials_returns_null_without_id(): void
     {
         $user = $this->provider->retrieveByCredentials(['name' => 'test']);
 
@@ -44,7 +44,7 @@ class UserProviderTest extends TestCase
     }
 
     #[Test]
-    public function validateCredentials_matches_session_user_id(): void
+    public function validate_credentials_matches_session_user_id(): void
     {
         session(['user-id' => 'abc-123']);
         $user = new StubUser(['id' => 'abc-123']);
@@ -53,7 +53,7 @@ class UserProviderTest extends TestCase
     }
 
     #[Test]
-    public function validateCredentials_fails_when_session_id_mismatch(): void
+    public function validate_credentials_fails_when_session_id_mismatch(): void
     {
         session(['user-id' => 'abc-123']);
         $user = new StubUser(['id' => 'wrong-id']);
@@ -62,7 +62,7 @@ class UserProviderTest extends TestCase
     }
 
     #[Test]
-    public function validateCredentials_returns_true_without_session(): void
+    public function validate_credentials_returns_true_without_session(): void
     {
         $user = new StubUser(['id' => 'any-id']);
 
