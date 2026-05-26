@@ -63,7 +63,7 @@
         "@types/react-dom": "^19.2.0",
         "@uidotdev/usehooks": "^2.4.1",
         "@vitejs/plugin-react": "^5.2.0",
-        "axios": "^1.9.0",
+        "axios": "^1.16.1",
         "globals": "^15.14.0",
         "laravel-echo": "^2.3.1",
         "laravel-vite-plugin": "^3.0.0",
