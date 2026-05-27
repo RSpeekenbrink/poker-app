@@ -29,7 +29,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     php8.5-intl \
     php8.5-gd \
     php8.5-redis \
-    php8.5-opcache \
     php8.5-readline \
     php8.5-pcov \
     php8.5-soap \
